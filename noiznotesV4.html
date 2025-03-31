@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Content Hub v6 (Filter Nav & Smooth View)</title>
+    <style>
+        /* --- CSS Variables (Themes) --- */
+        :root {
+            /* Light Theme Defaults */
+            --primary-color: #007bff; --secondary-color: #6c757d; --light-color: #f8f9fa;
+            --dark-color: #343a40; --bg-color: #ffffff; --text-color: #212529;
+            --sidebar-bg: #f1f3f5; --border-color: #dee2e6; --hover-bg: #e9ecef;
+            --active-bg: #dde2e7; --link-color: #0056b3; --input-bg: #ffffff;
+            --input-border: #ced4da; --shadow-color: rgba(0,0,0,0.05);
+            --success-color: #28a745; --danger-color: #dc3545; --menu-bg: #ffffff;
+            --nav-header-color: #495057;
+            --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            --border-radius: 6px; --transition-speed: 0.3s; /* Slightly slower for smoother feel */
+        }
+
+        /* --- Dark Theme --- */
+        body.dark-theme {
+            --primary-color: #58a6ff; --secondary-color: #8b949e; --light-color: #161b22;
+            --dark-color: #c9d1d9; --bg-color: #0d1117; --text-color: #c9d1d9;
+            --sidebar-bg: #161b22; --border-color: #30363d; --hover-bg: #21262d;
+            --active-bg: #282e34; --link-color: #79c0ff; --input-bg: #0d1117;
+            --input-border: #30363d; --shadow-color: rgba(255,255,255,0.05);
+            --success-color: #3fb950; --danger-color: #f85149; --menu-bg: #161b22;
+            --nav-header-color: #adb5bd;
+        }
+
+        /* --- Base Styles --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; overflow: hidden; /* Prevent body scrollbars, manage within flex */ }
+        body {
+            font-family: var(--font-family); background-color: var(--bg-color); color: var(--text-color);
+            line-height: 1.6; font-size: 16px;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+        }
+        .app-container { display: flex; height: 100vh; }
+
+        /* --- Sidebar --- (Minor style adjustments for controls) */
+        #sidebar {
+            width: 280px; flex-shrink: 0; background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color); display: flex; flex-direction: column;
+            overflow: hidden; /* Prevent sidebar itself from scrolling, navList will scroll */
+            transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+        }
+        #sidebar-header {
+            padding: 1rem 1rem 0.5rem 1rem; border-bottom: 1px solid var(--border-color);
+            margin-bottom: 0; flex-shrink: 0;
+            transition: border-color var(--transition-speed) ease;
+        }
+        .sidebar-title-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+         .sidebar-title-bar h2 { font-size: 1.4rem; color: var(--dark-color); margin: 0; transition: color var(--transition-speed) ease; }
+         #themeToggle { background: none; border: 1px solid var(--border-color); color: var(--secondary-color); padding: 0.3rem 0.6rem; border-radius: var(--border-radius); cursor: pointer; font-size: 0.8rem; transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease, border-color var(--transition-speed) ease; flex-shrink: 0; }
+         #themeToggle:hover { background-color: var(--hover-bg); color: var(--text-color); }
+         .sidebar-controls { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; }
+         .sidebar-controls select { flex-grow: 1; padding: 0.3rem 0.5rem; font-size: 0.85rem; border: 1px solid var(--input-border); border-radius: calc(var(--border-radius) - 2px); background-color: var(--input-bg); color: var(--text-color); transition: border-color var(--transition-speed) ease, background-color var(--transition-speed) ease, color var(--transition-speed) ease; cursor: pointer; }
+          .sidebar-controls select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary-color) 25%, transparent); }
+
+        #navList { list-style: none; padding: 0; margin: 0; flex-grow: 1; overflow-y: auto; /* Allow nav list to scroll independently */ }
+        #navList .nav-group-header { padding: 0.8rem 1.2rem 0.4rem 1.2rem; font-size: 0.8rem; font-weight: 600; color: var(--nav-header-color); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border-color); background-color: var(--sidebar-bg); position: sticky; top: 0; z-index: 1; }
+        #navList li a { display: block; padding: 0.7rem 1.2rem; text-decoration: none; color: var(--secondary-color); border-bottom: 1px solid var(--border-color); transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease, border-color var(--transition-speed) ease; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; position: relative; font-size: 0.95rem; }
+        #navList li a:hover { background-color: var(--hover-bg); color: var(--dark-color); }
+        #navList li a.active { background-color: var(--active-bg); color: var(--primary-color); font-weight: 600; }
+        #navList li a.active::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background-color: var(--primary-color); }
+
+        /* --- Main Content Area --- */
+        #mainContent {
+            flex-grow: 1; display: flex; flex-direction: column;
+            overflow: hidden; /* Prevent main area from causing body scroll */
+            position: relative;
+        }
+
+        /* --- Input Section --- (Unchanged) */
+        #inputSection { padding: 1.5rem; background-color: var(--light-color); border-bottom: 1px solid var(--border-color); flex-shrink: 0; transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease; }
+        /* ... rest of input section styles are unchanged ... */
+        #inputSection h3 { margin-bottom: 1rem; color: var(--dark-color); transition: color var(--transition-speed) ease; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; align-items: end; margin-bottom: 1rem; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { margin-bottom: 0.3rem; font-weight: 500; font-size: 0.9rem; color: var(--secondary-color); transition: color var(--transition-speed) ease; display: block; }
+        .form-group input[type="text"], .form-group select, .form-group textarea { padding: 0.6rem 0.8rem; border: 1px solid var(--input-border); border-radius: var(--border-radius); font-size: 1rem; background-color: var(--input-bg); color: var(--text-color); width: 100%; transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease, background-color var(--transition-speed) ease, color var(--transition-speed) ease; }
+        .form-group input[type="text"]:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary-color) 25%, transparent); }
+        #contentInput, .edit-content-input { width: 100%; min-height: 80px; resize: vertical; font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace; }
+        #addButton, .edit-save-button { padding: 0.6rem 1.5rem; background-color: var(--primary-color); color: white; border: none; border-radius: var(--border-radius); cursor: pointer; font-size: 1rem; font-weight: 500; transition: background-color var(--transition-speed) ease; height: calc(1.6rem + 1.2rem + 2px); align-self: end; }
+        #addButton:hover, .edit-save-button:hover { background-color: var(--link-color); }
+        .edit-cancel-button { padding: 0.6rem 1.0rem; background-color: var(--secondary-color); color: white; border: none; border-radius: var(--border-radius); cursor: pointer; font-size: 1rem; font-weight: 500; transition: background-color var(--transition-speed) ease; height: calc(1.6rem + 1.2rem + 2px); align-self: end; margin-left: 0.5rem; }
+        .edit-cancel-button:hover { background-color: color-mix(in srgb, var(--secondary-color) 80%, black); }
+
+
+        /* --- Top Right Tools Menu --- (Unchanged) */
+        #toolsMenuContainer { position: absolute; top: 1rem; right: 1.5rem; z-index: 10; }
+         /* ... rest of tools menu styles are unchanged ... */
+        #toolsMenuButton { padding: 0.5rem 1rem; background-color: var(--secondary-color); color: white; border: none; border-radius: var(--border-radius); cursor: pointer; font-size: 0.9rem; transition: background-color var(--transition-speed) ease; }
+        #toolsMenuButton:hover { background-color: color-mix(in srgb, var(--secondary-color) 80%, black); }
+        #toolsMenuDropdown { display: none; position: absolute; top: 100%; right: 0; background-color: var(--menu-bg); border: 1px solid var(--border-color); border-radius: var(--border-radius); box-shadow: 0 4px 10px var(--shadow-color); padding: 1rem; margin-top: 0.5rem; min-width: 250px; z-index: 11; transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease; }
+        #toolsMenuDropdown.visible { display: block; }
+        .tools-menu-group { margin-bottom: 1rem; } .tools-menu-group:last-child { margin-bottom: 0; }
+        .tools-menu-group label { display: block; font-weight: 500; font-size: 0.9rem; color: var(--secondary-color); margin-bottom: 0.4rem; transition: color var(--transition-speed) ease; }
+        .tools-menu-group input[type="file"] { width: 100%; font-size: 0.9rem; padding: 0.4rem 0.6rem; margin-bottom: 0.5rem; border: 1px solid var(--input-border); border-radius: var(--border-radius); background-color: var(--input-bg); color: var(--text-color); }
+        .tools-menu-group input[type="file"]::file-selector-button { padding: 0.2rem 0.6rem; border: 1px solid var(--input-border); border-radius: var(--border-radius); background-color: var(--light-color); color: var(--text-color); margin-right: 0.6rem; cursor: pointer; font-size: 0.85rem; transition: background-color var(--transition-speed) ease; }
+        .tools-menu-group input[type="file"]::file-selector-button:hover { background-color: var(--hover-bg); }
+        .tools-menu-group button { width: 100%; padding: 0.6rem 1rem; font-size: 0.9rem; border-radius: var(--border-radius); border: 1px solid transparent; cursor: pointer; transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease; text-align: center; }
+         #exportButton { background-color: var(--success-color); color: white; border-color: var(--success-color); } #exportButton:hover { background-color: color-mix(in srgb, var(--success-color) 85%, black); border-color: color-mix(in srgb, var(--success-color) 85%, black); }
+         #importButton { background-color: var(--primary-color); color: white; border-color: var(--primary-color); } #importButton:hover { background-color: var(--link-color); border-color: var(--link-color); } #importButton:disabled { background-color: var(--secondary-color); border-color: var(--secondary-color); cursor: not-allowed; opacity: 0.7; }
+
+
+        /* --- Display Section --- */
+        #displaySection {
+            flex-grow: 1; /* Allows it to take up remaining vertical space */
+            padding: 2rem;
+            overflow-y: auto; /* Crucial: Adds scrollbar HERE if content overflows */
+            position: relative;
+            padding-top: 4rem; /* Avoid overlap with tools menu */
+        }
+        .content-item {
+            /* Animation applied here */
+            display: none; margin-bottom: 1.5rem; border: 1px solid var(--border-color);
+            border-radius: var(--border-radius); background-color: var(--bg-color);
+            box-shadow: 0 2px 5px var(--shadow-color);
+             /* Animation: name duration timing-function delay iteration-count direction fill-mode */
+             animation: fadeIn var(--transition-speed) ease-out forwards; /* Use forwards to keep end state */
+             transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+        }
+        .content-item.active {
+             display: block;
+        }
+        /* Rest of display section styles unchanged */
+        .content-item-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; transition: border-color var(--transition-speed) ease; }
+        .content-item-header h4 { margin: 0; color: var(--primary-color); font-size: 1.2rem; transition: color var(--transition-speed) ease; }
+        .content-item-actions button { background: none; border: none; color: var(--secondary-color); cursor: pointer; font-size: 1rem; line-height: 1; opacity: 0.7; padding: 0.2rem 0.4rem; margin-left: 0.5rem; transition: color var(--transition-speed), opacity var(--transition-speed); }
+         .content-item-actions button:hover { opacity: 1; } .edit-button:hover { color: var(--primary-color); } .delete-button:hover { color: var(--danger-color); }
+        .content-body { padding: 1.5rem; word-wrap: break-word; } .content-body-display { } .content-body-edit { display: none; } .content-body-edit .form-group { margin-bottom: 1rem; } .content-body-edit .edit-actions { margin-top: 1rem; text-align: right;}
+        .content-body pre { white-space: pre-wrap; word-wrap: break-word; background-color: var(--light-color); padding: 1rem; border-radius: var(--border-radius); border: 1px solid var(--border-color); font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace; font-size: 0.95em; transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease; }
+        .content-body a.link-output { color: var(--primary-color); text-decoration: none; font-weight: 500; word-break: break-all; transition: color var(--transition-speed) ease; } .content-body a.link-output:hover { text-decoration: underline; color: var(--link-color); }
+        #placeholder { text-align: center; color: var(--secondary-color); padding: 3rem; font-style: italic; }
+        @keyframes fadeIn {
+             0% { opacity: 0; transform: translateY(10px); }
+             100% { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <nav id="sidebar">
+            <div id="sidebar-header">
+                 <div class="sidebar-title-bar">
+                    <h2>Noiz Content</h2>
+                    <button id="themeToggle" title="Toggle Theme">Light</button>
+                </div>
+                <div class="sidebar-controls">
+                    <select id="viewSelect" title="Filter & Group View">
+                        <option value="all">View:All (Ungrouped)</option>
+                        <option value="grouped">View:All (Grouped by Type)</option>
+                        <option value="filterText">View:Text Only</option>
+                        <option value="filterHtml">View:HTML Only</option>
+                        <option value="filterLink">View:Links Only</option>
+                    </select>
+                    <select id="sortSelect" title="Sort By">
+                        <option value="dateDesc">Sort: Newest First</option>
+                        <option value="dateAsc">Sort: Oldest First</option>
+                        <option value="titleAsc">Sort: Title (A-Z)</option>
+                        <option value="titleDesc">Sort: Title (Z-A)</option>
+                    </select>
+                </div>
+            </div>
+            <ul id="navList"></ul>
+        </nav>
+
+        <main id="mainContent">
+            <!-- Tools Menu Container (Unchanged) -->
+            <div id="toolsMenuContainer"> <button id="toolsMenuButton">Tools ▾</button> <div id="toolsMenuDropdown"> <div class="tools-menu-group"> <label>Export All Content</label> <button id="exportButton">Export to CSV</button> </div> <div class="tools-menu-group"> <label for="csvFileInput">Import Content from CSV</label> <input type="file" id="csvFileInput" accept=".csv"> <button id="importButton" disabled>Import Selected CSV</button> <small style="color: var(--secondary-color); font-size: 0.8em; display: block; margin-top: 0.5rem;">Note: Imports add to existing content. Expects 'title, type, content'.</small> </div> </div> </div>
+
+            <section id="inputSection">
+                <!-- Add New Content Form (Unchanged) -->
+                 <h3>Add New Content</h3> <div class="form-grid"> <div class="form-group"> <label for="titleInput">Title</label> <input type="text" id="titleInput" placeholder="Enter title for navigation"> </div> <div class="form-group"> <label for="typeSelect">Content Type</label> <select id="typeSelect"> <option value="text">Plain Text</option> <option value="html">HTML</option> <option value="link">Link (URL)</option> </select> </div> <button id="addButton">Add Content</button> </div> <div class="form-group"> <label for="contentInput">Content</label> <textarea id="contentInput" placeholder="Enter your content, HTML code, or a URL here..."></textarea> </div>
+            </section>
+
+            <section id="displaySection">
+                 <div id="placeholder">
+                     <p>Welcome! Add/Import content. Use the Tools menu (top-right) for CSV.</p>
+                     <p>Click on items in the left navigation to view them here.</p>
+                 </div>
+                 <!-- Content items rendered here -->
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Elements ---
+            const navList = document.getElementById('navList');
+            const displaySection = document.getElementById('displaySection');
+            const titleInput = document.getElementById('titleInput');
+            const typeSelect = document.getElementById('typeSelect');
+            const contentInput = document.getElementById('contentInput');
+            const addButton = document.getElementById('addButton');
+            const placeholder = document.getElementById('placeholder');
+            const themeToggleButton = document.getElementById('themeToggle');
+            // Tools Menu
+            const toolsMenuButton = document.getElementById('toolsMenuButton');
+            const toolsMenuDropdown = document.getElementById('toolsMenuDropdown');
+            const exportButton = document.getElementById('exportButton');
+            const csvFileInput = document.getElementById('csvFileInput');
+            const importButton = document.getElementById('importButton');
+            // Sidebar Controls
+            const viewSelect = document.getElementById('viewSelect'); // Renamed from groupSelect
+            const sortSelect = document.getElementById('sortSelect');
+            const body = document.body;
+
+            // --- State ---
+            const STORAGE_KEY = 'mySinglePageContentManagerData_v6'; // Increment version
+            const THEME_STORAGE_KEY = 'mySinglePageContentManagerTheme';
+            const UI_STATE_STORAGE_KEY = 'mySinglePageContentManagerUIState_v2'; // Increment UI state version
+            const NEWLINE_PLACEHOLDER = '{{NEWLINE}}';
+            const NEWLINE_REGEX = new RegExp(NEWLINE_PLACEHOLDER.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g');
+            let contentItems = []; // Holds {id, title, type, content, createdAt}
+            let currentTheme = 'light';
+            let selectedFile = null;
+            // UI State with defaults
+            let currentSortOrder = 'dateDesc';
+            let currentViewMode = 'all'; // 'all', 'grouped', 'filterText', 'filterHtml', 'filterLink'
+            let activeItemId = null;
+
+            // --- Core Functions ---
+            function generateId() { return Date.now().toString(36) + Math.random().toString(36).substring(2); }
+            function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(contentItems)); }
+            function saveUIState() {
+                const uiState = { currentSortOrder, currentViewMode }; // Save view mode
+                localStorage.setItem(UI_STATE_STORAGE_KEY, JSON.stringify(uiState));
+            }
+            function escapeHtml(unsafe) { if (typeof unsafe !== 'string') return unsafe; return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
+
+            function loadData() {
+                // Load Content
+                const storedData = localStorage.getItem(STORAGE_KEY);
+                try { contentItems = storedData ? JSON.parse(storedData) : []; if (!Array.isArray(contentItems)) contentItems = []; }
+                catch (e) { console.error("Error parsing content data:", e); contentItems = []; }
+                contentItems.forEach(item => { if (!item.createdAt) item.createdAt = Date.now(); });
+
+                // Load Theme
+                const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+                setTheme(storedTheme === 'dark' ? 'dark' : 'light');
+
+                // Load UI State (Sort/View)
+                const storedUIState = localStorage.getItem(UI_STATE_STORAGE_KEY);
+                if (storedUIState) {
+                    try {
+                        const uiState = JSON.parse(storedUIState);
+                        currentSortOrder = uiState.currentSortOrder || 'dateDesc';
+                        currentViewMode = uiState.currentViewMode || 'all'; // Load view mode
+                    } catch (e) { console.error("Error parsing UI state:", e); }
+                }
+                // Set dropdown values
+                sortSelect.value = currentSortOrder;
+                viewSelect.value = currentViewMode;
+
+                renderAll(); updatePlaceholder();
+            }
+
+            function renderAll() {
+                 renderNavigation();
+                 displaySection.innerHTML = '';
+                 displaySection.appendChild(placeholder);
+                 contentItems.forEach(item => { renderContentItem(item); });
+                 if (activeItemId && contentItems.some(item => item.id === activeItemId)) { // Check if active item still exists
+                    showContent(activeItemId, false); // Re-activate without animation
+                 } else {
+                    activeItemId = null; // Clear active state if item was deleted/doesn't exist
+                 }
+                 updatePlaceholder();
+            }
+
+            // --- Navigation Rendering (with Filtering & Grouping) ---
+            function renderNavigation() {
+                navList.innerHTML = '';
+                let itemsToRender = [...contentItems]; // Start with all
+
+                // 1. Filter based on viewMode
+                switch (currentViewMode) {
+                    case 'filterText': itemsToRender = itemsToRender.filter(item => item.type === 'text'); break;
+                    case 'filterHtml': itemsToRender = itemsToRender.filter(item => item.type === 'html'); break;
+                    case 'filterLink': itemsToRender = itemsToRender.filter(item => item.type === 'link'); break;
+                    // 'all' and 'grouped' use all items initially
+                }
+
+                // 2. Sort the filtered (or all) items
+                itemsToRender.sort((a, b) => {
+                    switch (currentSortOrder) {
+                        case 'titleAsc': return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
+                        case 'titleDesc': return b.title.toLowerCase().localeCompare(a.title.toLowerCase());
+                        case 'dateAsc': return a.createdAt - b.createdAt;
+                        case 'dateDesc': default: return b.createdAt - a.createdAt;
+                    }
+                });
+
+                // 3. Render (Group if necessary)
+                if (currentViewMode === 'grouped') {
+                    const groups = { text: [], html: [], link: [] };
+                    // Group the already sorted items
+                    itemsToRender.forEach(item => { if (groups[item.type]) groups[item.type].push(item); });
+
+                    ['text', 'html', 'link'].forEach(type => {
+                        if (groups[type].length > 0) {
+                            const header = document.createElement('div'); header.classList.add('nav-group-header');
+                            header.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)} (${groups[type].length})`;
+                            navList.appendChild(header);
+                            groups[type].forEach(item => renderNavItem(item));
+                        }
+                    });
+                } else {
+                    // Render filtered & sorted items directly for 'all', 'filterText', 'filterHtml', 'filterLink'
+                    itemsToRender.forEach(item => renderNavItem(item));
+                }
+
+                 // Re-apply active class
+                 if (activeItemId) {
+                     const activeLink = navList.querySelector(`a[data-id="${activeItemId}"]`);
+                     if (activeLink) activeLink.classList.add('active');
+                 }
+            }
+
+            function renderNavItem(item) { /* ... (same as before) ... */ const li = document.createElement('li'); const a = document.createElement('a'); a.href = '#'; a.textContent = item.title; a.dataset.id = item.id; a.addEventListener('click', (e) => { e.preventDefault(); showContent(item.id, true); }); li.appendChild(a); navList.appendChild(li); return a; }
+            function renderContentItem(item) { /* ... (same as before) ... */ const contentWrapper = document.createElement('div'); contentWrapper.classList.add('content-item'); contentWrapper.id = `content-${item.id}`; contentWrapper.dataset.id = item.id; const headerDiv = document.createElement('div'); headerDiv.classList.add('content-item-header'); const titleH4 = document.createElement('h4'); titleH4.textContent = item.title; const actionsDiv = document.createElement('div'); actionsDiv.classList.add('content-item-actions'); const editButton = document.createElement('button'); editButton.innerHTML = '✎'; editButton.title = 'Edit'; editButton.classList.add('edit-button'); editButton.addEventListener('click', () => startEdit(item.id)); const deleteButton = document.createElement('button'); deleteButton.innerHTML = '&times;'; deleteButton.title = 'Delete'; deleteButton.classList.add('delete-button'); deleteButton.addEventListener('click', () => deleteContent(item.id)); actionsDiv.appendChild(editButton); actionsDiv.appendChild(deleteButton); headerDiv.appendChild(titleH4); headerDiv.appendChild(actionsDiv); contentWrapper.appendChild(headerDiv); const contentBody = document.createElement('div'); contentBody.classList.add('content-body'); const displayDiv = document.createElement('div'); displayDiv.classList.add('content-body-display'); renderContentForDisplay(displayDiv, item); const editDiv = document.createElement('div'); editDiv.classList.add('content-body-edit'); renderContentForEdit(editDiv, item); contentBody.appendChild(displayDiv); contentBody.appendChild(editDiv); contentWrapper.appendChild(contentBody); displaySection.appendChild(contentWrapper); }
+            function renderContentForDisplay(container, item) { /* ... (same as before) ... */ container.innerHTML = ''; switch (item.type) { case 'text': const pre = document.createElement('pre'); pre.textContent = item.content; container.appendChild(pre); break; case 'html': container.innerHTML = item.content; break; case 'link': const link = document.createElement('a'); link.href = item.content.startsWith('http') ? item.content : `http://${item.content}`; link.textContent = item.content; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.classList.add('link-output'); container.appendChild(link); break; default: container.textContent = `Unknown type: ${item.type}`; } }
+            function renderContentForEdit(container, item) { /* ... (same as before, generates edit form) ... */ container.innerHTML = ''; const titleGroup = document.createElement('div'); titleGroup.classList.add('form-group'); titleGroup.innerHTML = `<label for="edit-title-${item.id}">Title</label><input type="text" id="edit-title-${item.id}" class="edit-title-input" value="${escapeHtml(item.title)}">`; container.appendChild(titleGroup); const typeGroup = document.createElement('div'); typeGroup.classList.add('form-group'); typeGroup.innerHTML = `<label for="edit-type-${item.id}">Type</label><select id="edit-type-${item.id}" class="edit-type-select"><option value="text" ${item.type === 'text' ? 'selected' : ''}>Text</option><option value="html" ${item.type === 'html' ? 'selected' : ''}>HTML</option><option value="link" ${item.type === 'link' ? 'selected' : ''}>Link</option></select>`; container.appendChild(typeGroup); const contentGroup = document.createElement('div'); contentGroup.classList.add('form-group'); contentGroup.innerHTML = `<label for="edit-content-${item.id}">Content</label><textarea id="edit-content-${item.id}" class="edit-content-input">${escapeHtml(item.content)}</textarea>`; container.appendChild(contentGroup); const actionsDiv = document.createElement('div'); actionsDiv.classList.add('edit-actions'); const saveButton = document.createElement('button'); saveButton.textContent = 'Save'; saveButton.classList.add('edit-save-button'); saveButton.addEventListener('click', () => saveEdit(item.id)); const cancelButton = document.createElement('button'); cancelButton.textContent = 'Cancel'; cancelButton.classList.add('edit-cancel-button'); cancelButton.addEventListener('click', () => cancelEdit(item.id)); actionsDiv.appendChild(saveButton); actionsDiv.appendChild(cancelButton); container.appendChild(actionsDiv); }
+
+            function addContent() { /* ... (Adds createdAt, calls renderNavigation) ... */ const title = titleInput.value.trim(); const type = typeSelect.value; const content = contentInput.value.trim(); if (!title || !content) { alert('Title/Content required.'); return; } const newItem = { id: generateId(), title, type, content, createdAt: Date.now() }; contentItems.push(newItem); renderContentItem(newItem); saveData(); renderNavigation(); titleInput.value = ''; contentInput.value = ''; typeSelect.value = 'text'; updatePlaceholder(); showContent(newItem.id, true); }
+
+            function showContent(id, animate = true) {
+                 // Check if the item actually exists in the current view before activating
+                 const itemExistsInCurrentView = !!navList.querySelector(`a[data-id="${id}"]`);
+
+                 if (!itemExistsInCurrentView) {
+                     // If the selected item is filtered out, don't show it, clear active state
+                     if (activeItemId === id) {
+                         activeItemId = null;
+                         // Hide all content items
+                         displaySection.querySelectorAll('.content-item').forEach(item => item.classList.remove('active'));
+                         navList.querySelectorAll('a').forEach(link => link.classList.remove('active'));
+                         updatePlaceholder();
+                     }
+                     return; // Don't proceed to show if filtered out
+                 }
+
+                 activeItemId = id; // Store active ID
+                 // Hide inactive content items & cancel edits
+                 displaySection.querySelectorAll('.content-item').forEach(item => {
+                     if(item.id !== `content-${id}`) { item.classList.remove('active'); }
+                     const editView = item.querySelector('.content-body-edit'); const displayView = item.querySelector('.content-body-display'); if (editView.style.display !== 'none') { editView.style.display = 'none'; displayView.style.display = 'block'; }});
+                 // Deactivate nav links
+                 navList.querySelectorAll('a').forEach(link => link.classList.remove('active'));
+                 // Find and show selected content
+                 const selectedContentDiv = document.getElementById(`content-${id}`);
+                 if (selectedContentDiv) {
+                      // Force re-trigger animation if needed
+                     if(animate) {
+                         selectedContentDiv.style.animation = 'none';
+                         void selectedContentDiv.offsetWidth; // Reflow hack
+                         selectedContentDiv.style.animation = `fadeIn var(--transition-speed) ease-out forwards`;
+                     } else {
+                          selectedContentDiv.style.animation = 'none'; // Ensure no stale animation plays
+                     }
+                     selectedContentDiv.classList.add('active');
+                     updatePlaceholder();
+                 }
+                 // Activate selected nav link
+                 const selectedNavLink = navList.querySelector(`a[data-id="${id}"]`); if (selectedNavLink) selectedNavLink.classList.add('active');
+            }
+
+            function deleteContent(id) { /* ... (Calls renderNavigation) ... */ if (!confirm('Delete?')) return; const indexToDelete = contentItems.findIndex(item => item.id === id); if (indexToDelete > -1) contentItems.splice(indexToDelete, 1); const contentItemToRemove = displaySection.querySelector(`#content-${id}`); const wasActive = contentItemToRemove && contentItemToRemove.classList.contains('active'); if (contentItemToRemove) contentItemToRemove.remove(); if (wasActive) activeItemId = null; saveData(); renderNavigation(); updatePlaceholder(); }
+            function updatePlaceholder() { /* ... (Checks activeItemId) ... */ const hasAnyContent = contentItems.length > 0; placeholder.style.display = (hasAnyContent && activeItemId && !!document.getElementById(`content-${activeItemId}`)) ? 'none' : 'block'; } // Also check if active element exists
+            function startEdit(id) { /* ... (same as before) ... */ const contentItemDiv = document.getElementById(`content-${id}`); if (!contentItemDiv) return; const displayView = contentItemDiv.querySelector('.content-body-display'); const editView = contentItemDiv.querySelector('.content-body-edit'); const itemData = contentItems.find(item => item.id === id); if (itemData) { contentItemDiv.querySelector('.edit-title-input').value = itemData.title; contentItemDiv.querySelector('.edit-type-select').value = itemData.type; contentItemDiv.querySelector('.edit-content-input').value = itemData.content; } displayView.style.display = 'none'; editView.style.display = 'block'; }
+            function cancelEdit(id) { /* ... (same as before) ... */ const contentItemDiv = document.getElementById(`content-${id}`); if (!contentItemDiv) return; const displayView = contentItemDiv.querySelector('.content-body-display'); const editView = contentItemDiv.querySelector('.content-body-edit'); editView.style.display = 'none'; displayView.style.display = 'block'; }
+            function saveEdit(id) { /* ... (Calls renderNavigation) ... */ const contentItemDiv = document.getElementById(`content-${id}`); if (!contentItemDiv) return; const itemIndex = contentItems.findIndex(item => item.id === id); if (itemIndex === -1) return; const newTitle = contentItemDiv.querySelector('.edit-title-input').value.trim(); const newType = contentItemDiv.querySelector('.edit-type-select').value; const newContent = contentItemDiv.querySelector('.edit-content-input').value.trim(); if (!newTitle || !newContent) { alert('Title/Content empty.'); return; } const originalItem = contentItems[itemIndex]; const updatedItem = { ...originalItem, title: newTitle, type: newType, content: newContent }; contentItems[itemIndex] = updatedItem; saveData(); renderNavigation(); const titleH4 = contentItemDiv.querySelector('.content-item-header h4'); if (titleH4) titleH4.textContent = newTitle; const displayView = contentItemDiv.querySelector('.content-body-display'); renderContentForDisplay(displayView, updatedItem); cancelEdit(id); }
+
+            // --- Theme Functions ---
+             function setTheme(theme) { /* ... (same as before) ... */ currentTheme = theme; if (theme === 'dark') { body.classList.add('dark-theme'); themeToggleButton.textContent = 'Dark'; } else { body.classList.remove('dark-theme'); themeToggleButton.textContent = 'Light'; } localStorage.setItem(THEME_STORAGE_KEY, theme); }
+             function toggleTheme() { setTheme(currentTheme === 'light' ? 'dark' : 'light'); }
+
+             // --- CSV Export/Import Functions (Unchanged - still use newline fix & add createdAt) ---
+             function escapeCSVField(field) { /* ... */ if(field===null || field===undefined){return '';} let s=String(field).replace(/\n/g,NEWLINE_PLACEHOLDER); return (s.includes(',')||s.includes('"')) ? `"${s.replace(/"/g,'""')}"` : s;}
+             function exportToCSV() { /* ... */ if(contentItems.length===0){alert("No content.");return;} const h=['title','type','content']; const r=[h.join(',')]; contentItems.forEach(i=>{r.push([escapeCSVField(i.title),escapeCSVField(i.type),escapeCSVField(i.content)].join(','))}); const s=r.join('\n'); const b=new Blob([s],{type:'text/csv;charset=utf-8;'}); const l=document.createElement("a"); const u=URL.createObjectURL(b); l.setAttribute("href",u);l.setAttribute("download","content_hub_export.csv");l.style.visibility='hidden';document.body.appendChild(l);l.click();document.body.removeChild(l);URL.revokeObjectURL(u); }
+             function parseCSVRow(rowString) { /* ... */ const f=[];let c='';let q=!1;for(let i=0;i<rowString.length;i++){const a=rowString[i];if(a==='"'){if(q&&rowString[i+1]==='"'){c+='"';i++}else{q=!q}}else if(a===','&&!q){f.push(c);c=''}else{c+=a}}f.push(c);return f; }
+             function importFromCSV(csvString) { /* ... Calls renderNavigation */ const lns=csvString.split(/\r?\n/); if(lns.length<2){alert("CSV empty.");return;} const hdr=parseCSVRow(lns[0].trim().toLowerCase()); const exp=['title','type','content']; if(hdr.length!==3||hdr[0]!==exp[0]||hdr[1]!==exp[1]||hdr[2]!==exp[2]){console.warn("CSV header mismatch.");} let imp=0,err=0; for(let i=1;i<lns.length;i++){const ln=lns[i].trim(); if(!ln)continue; try{const flds=parseCSVRow(ln); if(flds.length===3){let t=flds[0].replace(NEWLINE_REGEX,'\n'), y=flds[1].replace(NEWLINE_REGEX,'\n'), c=flds[2].replace(NEWLINE_REGEX,'\n'); if(!['text','html','link'].includes(y.toLowerCase())){console.warn(`Skip r${i+1}:Inv type`);err++;continue;} if(!t||!c){console.warn(`Skip r${i+1}:Empty t/c`);err++;continue;} const ni={id:generateId(),title:t,type:y.toLowerCase(),content:c,createdAt:Date.now()}; contentItems.push(ni);renderContentItem(ni);imp++;}else{console.warn(`Skip r${i+1}:Bad fields`);err++;}}catch(pE){console.error(`Err r${i+1}:`,pE);err++;}} if(imp>0){saveData();renderNavigation();alert(`Imported ${imp}.${err>0?` Skip ${err}.`:''}`);} else if(err>0){alert(`Import fail. Skip ${err}.`);} else{alert("No valid items.");} csvFileInput.value='';selectedFile=null;importButton.disabled=true;closeToolsMenu(); }
+             function handleFileSelect(event) { selectedFile = event.target.files[0]; importButton.disabled = !selectedFile; }
+             function handleImportClick() { /* ... (same as before) ... */ if (!selectedFile) { return; } const reader = new FileReader(); reader.onload = (e) => { try { importFromCSV(e.target.result); } catch (error) { console.error("Import err:", error); alert("Import error."); csvFileInput.value = ''; selectedFile = null; importButton.disabled = true; closeToolsMenu(); } }; reader.onerror = () => { alert("File read error."); csvFileInput.value = ''; selectedFile = null; importButton.disabled = true; closeToolsMenu(); }; reader.readAsText(selectedFile); }
+
+             // --- Tools Menu Functions ---
+             function toggleToolsMenu() { toolsMenuDropdown.classList.toggle('visible'); }
+             function closeToolsMenu() { toolsMenuDropdown.classList.remove('visible'); }
+
+            // --- Event Listeners ---
+            addButton.addEventListener('click', addContent);
+            themeToggleButton.addEventListener('click', toggleTheme);
+            // Tools Menu
+            toolsMenuButton.addEventListener('click', toggleToolsMenu);
+            exportButton.addEventListener('click', exportToCSV);
+            csvFileInput.addEventListener('change', handleFileSelect);
+            importButton.addEventListener('click', handleImportClick);
+            document.addEventListener('click', (event) => { if (!toolsMenuContainer.contains(event.target) && toolsMenuDropdown.classList.contains('visible')) closeToolsMenu(); });
+            // Sort/View Listeners
+            sortSelect.addEventListener('change', (e) => {
+                currentSortOrder = e.target.value;
+                saveUIState();
+                renderNavigation();
+            });
+            viewSelect.addEventListener('change', (e) => { // Changed from groupSelect
+                currentViewMode = e.target.value;
+                saveUIState();
+                renderNavigation();
+                 // If the currently active item is now filtered out, deactivate it
+                 if (activeItemId && !contentItems.filter(item => {
+                    switch (currentViewMode) {
+                        case 'filterText': return item.type === 'text';
+                        case 'filterHtml': return item.type === 'html';
+                        case 'filterLink': return item.type === 'link';
+                        default: return true; // Keep if 'all' or 'grouped'
+                    }
+                 }).some(item => item.id === activeItemId)) {
+                     activeItemId = null;
+                     displaySection.querySelectorAll('.content-item').forEach(item => item.classList.remove('active'));
+                     updatePlaceholder();
+                 }
+
+            });
+
+
+            // --- Initial Load ---
+            loadData();
+
+        });
+    </script>
+</body>
+</html>

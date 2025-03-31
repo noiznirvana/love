@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nmap Command Reference</title>
+    <style>
+        /* --- Global Styles & CSS Variables --- */
+        :root {
+            --bg-color: #f4f7f9;
+            --text-color: #2c3e50;
+            --primary-color: #3498db;
+            --secondary-color: #e0e6eb; /* Used for sidebar bg */
+            --input-bg-color: #ffffff; /* Input background */
+            --input-text-color: #2c3e50; /* Input text */
+            --accent-color: #e74c3c;
+            --nav-bg: #ffffff;
+            --nav-text: #2c3e50;
+            --code-bg: #e8ecf1;
+            --code-text: #333;
+            --border-color: #d1d9e0;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --three-particle-color: 0x3498db; /* Three.js color (hex number) */
+            --sidebar-width: 230px; /* Sidebar width variable */
+            --top-nav-height: 60px; /* Approximate height of top nav */
+
+            --scrollbar-bg: #f1f1f1;
+            --scrollbar-thumb: #c1c1c1;
+            --scrollbar-thumb-hover: #a8a8a8;
+        }
+
+        body.dark-theme {
+            --bg-color: #1a1d24;
+            --text-color: #ecf0f1;
+            --primary-color: #5dade2;
+            --secondary-color: #21252e; /* Used for sidebar bg */
+            --input-bg-color: #2c333e; /* Dark input background */
+            --input-text-color: #ecf0f1; /* Dark input text */
+            --accent-color: #e74c3c;
+            --nav-bg: #2c333e; /* Darker top nav */
+            --nav-text: #ecf0f1;
+            --code-bg: #282c34;
+            --code-text: #abb2bf;
+            --border-color: #3a414d;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --three-particle-color: 0x5dade2; /* Three.js color (hex number) */
+
+            --scrollbar-bg: #2c333e;
+            --scrollbar-thumb: #4a5260;
+            --scrollbar-thumb-hover: #5f697a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            padding-top: var(--top-nav-height); /* Prevent content going under fixed top nav */
+            /* padding-left set by media query below */
+        }
+
+        /* --- Scrollbar Styling --- */
+        ::-webkit-scrollbar {
+          width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+          background: var(--scrollbar-bg);
+        }
+        ::-webkit-scrollbar-thumb {
+          background: var(--scrollbar-thumb);
+          border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+          background: var(--scrollbar-thumb-hover);
+        }
+        /* Firefox scrollbar */
+        html {
+          scrollbar-width: thin;
+          scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-bg);
+        }
+
+
+        /* --- Three.js Canvas --- */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Behind everything else */
+            pointer-events: none; /* Allow clicking through */
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block; /* Remove extra space below canvas */
+        }
+
+        /* --- Top Navigation Bar --- */
+        #top-nav {
+            background-color: var(--nav-bg);
+            color: var(--nav-text);
+            padding: 0 1.5rem; /* Adjust padding */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed; /* Changed to fixed */
+            top: 0;
+            left: 0; /* Start from left edge */
+            width: 100%; /* Full width */
+            height: var(--top-nav-height); /* Set fixed height */
+            z-index: 1000;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            transition: background-color 0.3s ease, color 0.3s ease, left 0.3s ease, width 0.3s ease; /* Added transitions */
+            border-bottom: 1px solid var(--border-color);
+        }
+        /* Adjust left/width when sidebar is present (on larger screens) */
+        body:not(.no-sidebar) #top-nav {
+             left: var(--sidebar-width);
+             width: calc(100% - var(--sidebar-width));
+        }
+
+
+        .nav-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            white-space: nowrap; /* Prevent title wrapping */
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem; /* Space between search and toggle button */
+        }
+
+        #search-input {
+            padding: 0.4rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background-color: var(--input-bg-color);
+            color: var(--input-text-color);
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+            min-width: 150px; /* Minimum width */
+            max-width: 250px; /* Maximum width */
+        }
+        #search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(var(--primary-rgb, 52, 152, 219), 0.3); /* Focus ring */
+        }
+        /* Helper for focus ring color */
+        :root { --primary-rgb: 52, 152, 219; }
+        body.dark-theme { --primary-rgb: 93, 173, 226; }
+
+
+        .theme-toggle-btn {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+            white-space: nowrap; /* Prevent button text wrapping */
+        }
+
+        .theme-toggle-btn:hover {
+            opacity: 0.9;
+        }
+
+        .theme-toggle-btn .icon {
+            margin-right: 5px;
+        }
+
+        /* --- Left Sidebar Navigation --- */
+        #sidebar {
+            position: fixed;
+            left: 0;
+            top: 0; /* Align with top of viewport */
+            width: var(--sidebar-width);
+            height: 100vh; /* Full viewport height */
+            background-color: var(--secondary-color);
+            padding: 1.5rem 0; /* Padding top/bottom, no side padding needed for links */
+            padding-top: calc(var(--top-nav-height) + 1.5rem); /* Push content below top nav */
+            overflow-y: auto; /* Enable scroll if content overflows */
+            z-index: 900; /* Below top nav but above canvas */
+            border-right: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+            transform: translateX(0); /* Initial state */
+        }
+
+        #sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #sidebar nav ul li a {
+            display: block;
+            padding: 0.6rem 1.5rem;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
+            border-left: 3px solid transparent; /* For active/hover effect */
+        }
+
+        #sidebar nav ul li a:hover {
+            background-color: rgba(0, 0, 0, 0.05); /* Subtle hover */
+            color: var(--primary-color);
+            padding-left: calc(1.5rem - 3px); /* Indent text slightly */
+            border-left-color: var(--primary-color);
+        }
+
+        body.dark-theme #sidebar nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.05); /* Subtle hover */
+        }
+
+        /* --- Main Content Area --- */
+        .container {
+            max-width: 950px; /* Adjust max-width if needed */
+            margin: 2rem auto 2rem 0; /* Auto top/bottom, 0 right/left initially */
+            padding: 2rem;
+            background-color: rgba(var(--bg-rgb), 0.9); /* Slightly transparent to hint at background */
+            border-radius: 8px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            position: relative; /* Needed for stacking context */
+            z-index: 1; /* Above canvas */
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease, margin-left 0.3s ease; /* Added margin transition */
+            /* Set margin-left when sidebar is present */
+             margin-left: calc(var(--sidebar-width) + 2rem); /* Sidebar width + desired gap */
+        }
+         /* Helper to parse color for rgba */
+        :root { --bg-rgb: 244, 247, 249; }
+        body.dark-theme { --bg-rgb: 26, 29, 36; }
+
+
+        h1, h2, h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        /* Add padding-top to section headers to account for fixed nav bar */
+        section[id] {
+             padding-top: calc(var(--top-nav-height) + 1rem); /* Add padding */
+             margin-top: calc(-1 * (var(--top-nav-height) + 1rem)); /* Negative margin to counteract padding for anchor links */
+        }
+
+
+        h2 {
+            margin-top: 2.5rem; /* Keep vertical spacing between sections */
+            border-bottom: 1px solid var(--secondary-color);
+            padding-bottom: 0.3rem;
+            transition: opacity 0.3s ease; /* Add transition for potential future hiding */
+        }
+
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        ul:not(#sidebar ul) { /* Exclude sidebar lists */
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* --- Code Blocks & Options --- */
+        code {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 0.2em 0.4em;
+            margin: 0;
+            font-size: 0.9em;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        pre code {
+            padding: 0;
+            background-color: transparent;
+            color: inherit; /* Inherit color from pre */
+            font-size: inherit;
+        }
+
+        dl {
+            margin-bottom: 1.5rem;
+        }
+
+        dt {
+            font-weight: bold;
+            margin-top: 1rem;
+            /* display: block; */ /* Ensure dt takes full width if needed */
+             transition: display 0.1s ease; /* Smooth hide/show */
+        }
+        dd {
+            margin-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            /* display: block; */ /* Ensure dd takes full width if needed */
+             transition: display 0.1s ease; /* Smooth hide/show */
+        }
+
+        dt code {
+            font-weight: bold; /* Ensure code in dt is bold too */
+        }
+
+        /* Style for hidden items */
+        .hidden {
+            display: none !important; /* Force hide */
+        }
+
+        /* --- No Results Message --- */
+        #no-results {
+            text-align: center;
+            margin-top: 3rem;
+            font-style: italic;
+            color: var(--accent-color);
+            display: none; /* Hidden by default */
+        }
+
+
+        /* --- Responsive Design --- */
+
+        /* Styles for large screens (default) assume sidebar is visible */
+        /* Add class via JS or manually if needed, used here to simplify selectors */
+
+        /* Hide sidebar and adjust layout on medium/small screens */
+        @media (max-width: 992px) {
+             body {
+                 padding-left: 0; /* Remove body padding */
+                 &.no-sidebar { /* Use this class if sidebar can be toggled */
+                     #top-nav {
+                         left: 0;
+                         width: 100%;
+                     }
+                 }
+            }
+             #sidebar {
+                 transform: translateX(-100%); /* Slide sidebar out */
+             }
+             #top-nav { /* Top nav takes full width when sidebar is hidden */
+                 left: 0;
+                 width: 100%;
+             }
+             .container {
+                 margin-left: auto; /* Center container again */
+                 margin-right: auto;
+                 max-width: 90%; /* Allow more width */
+             }
+        }
+
+
+        @media (max-width: 768px) {
+            /* Adjust top nav for smaller screens */
+            #top-nav {
+                padding: 0 1rem; /* Less padding */
+                height: auto; /* Allow wrapping */
+                flex-wrap: wrap; /* Allow items to wrap */
+                padding-top: 0.5rem;
+                padding-bottom: 0.5rem;
+                 row-gap: 0.5rem; /* Add gap between rows if wrapped */
+            }
+             /* Recalculate padding/margin based on dynamic top nav height */
+             body { padding-top: 100px; } /* Estimate or calculate dynamically */
+             section[id] { padding-top: 110px; margin-top: -110px; }
+
+            .nav-title {
+                width: 100%; /* Title takes full width on first row */
+                margin-bottom: 0.5rem; /* Space below title */
+                font-size: 1.3rem;
+            }
+            .nav-controls {
+                width: 100%; /* Controls take full width on second row */
+                justify-content: flex-end; /* Align controls to the right */
+            }
+             #search-input {
+                 flex-grow: 1; /* Allow search to take available space */
+                 max-width: none; /* Remove max width limit */
+             }
+
+            .container {
+                margin: 1rem auto; /* Adjust margin */
+                padding: 1rem;
+                max-width: 100%; /* Full width */
+                width: calc(100% - 2rem); /* Account for potential body padding/margin */
+            }
+            h1 { font-size: 1.6rem; }
+            h2 { font-size: 1.3rem; }
+        }
+
+         @media (max-width: 480px) {
+             body { padding-top: 90px; } /* Adjust padding */
+             section[id] { padding-top: 100px; margin-top: -100px; }
+
+             .nav-controls {
+                  gap: 0.5rem; /* Reduce gap */
+             }
+            .theme-toggle-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+             #search-input {
+                 font-size: 0.85rem;
+             }
+
+             h1 { font-size: 1.5rem; }
+             h2 { font-size: 1.2rem; }
+             pre { font-size: 0.85rem; }
+             code { font-size: 0.85em; }
+        }
+
+    </style>
+</head>
+<body class="no-sidebar"> <!-- Start with no-sidebar class for initial state based on media query -->
+
+    <!-- Three.js Canvas Container -->
+    <div id="canvas-container"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar">
+        <nav>
+            <ul>
+                <li><a href="#target-spec">Target Specification</a></li>
+                <li><a href="#host-discovery">Host Discovery</a></li>
+                <li><a href="#scan-techniques">Scan Techniques</a></li>
+                <li><a href="#port-spec">Port Specification</a></li>
+                <li><a href="#version-detection">Version Detection</a></li>
+                <li><a href="#os-detection">OS Detection</a></li>
+                <li><a href="#nse">NSE Scripts</a></li>
+                <li><a href="#timing">Timing & Performance</a></li>
+                <li><a href="#evasion">Firewall/IDS Evasion</a></li>
+                <li><a href="#output">Output Formats</a></li>
+                <li><a href="#misc">Miscellaneous</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Top Navigation Bar -->
+    <nav id="top-nav">
+        <div class="nav-title">Nmap Reference (n01z alcid) </div>
+        <div class="nav-controls">
+            <input type="search" id="search-input" placeholder="Search options..." aria-label="Search Nmap options">
+            <button id="theme-toggle" class="theme-toggle-btn">
+                <span class="icon">🌓</span> Toggle Theme
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Nmap Command Reference & Examples</h1>
+
+        <p>Nmap ("Network Mapper") is a free and open-source utility for network discovery and security auditing. Many systems and network administrators also find it useful for tasks such as network inventory, managing service upgrade schedules, and monitoring host or service uptime.</p>
+
+        <!-- No Results Message Placeholder -->
+        <div id="no-results">No matching options found.</div>
+
+        <!-- ==========================
+             TARGET SPECIFICATION
+             ========================== -->
+        <section id="target-spec">
+            <h2>Target Specification</h2>
+            <p>Nmap allows various ways to specify the targets you want to scan.</p>
+            <dl>
+                <dt><code>&lt;target&gt;</code> (Hostname or IP)</dt>
+                <dd>Scan a single target by its hostname or IP address.
+                    <pre><code>nmap scanme.nmap.org</code></pre>
+                    <pre><code>nmap 192.168.1.1</code></pre>
+                </dd>
+
+                <dt><code>&lt;range&gt;</code> (IP Range)</dt>
+                <dd>Scan a range of IP addresses.
+                    <pre><code>nmap 192.168.1.1-100</code></pre>
+                </dd>
+
+                <dt><code>&lt;network/CIDR&gt;</code></dt>
+                <dd>Scan an entire subnet using CIDR notation.
+                    <pre><code>nmap 192.168.1.0/24</code></pre>
+                </dd>
+
+                <dt><code>-iL &lt;inputfilename&gt;</code></dt>
+                <dd>Scan targets listed in a file. Each line can contain a hostname, IP, range, or CIDR block.
+                    <pre><code>nmap -iL targets.txt</code></pre>
+                </dd>
+
+                <dt><code>--exclude &lt;host1[,host2],...&gt;</code></dt>
+                <dd>Exclude specific hosts or networks from the scan.
+                    <pre><code>nmap 192.168.1.0/24 --exclude 192.168.1.5</code></pre>
+                </dd>
+
+                 <dt><code>--excludefile &lt;excludefile&gt;</code></dt>
+                <dd>Exclude hosts listed in a file.
+                    <pre><code>nmap 192.168.1.0/24 --excludefile excluded_hosts.txt</code></pre>
+                </dd>
+            </dl>
+        </section>
+
+        <!-- ==========================
+             HOST DISCOVERY (Ping Scans)
+             ========================== -->
+        <section id="host-discovery">
+            <h2>Host Discovery (Ping Scans)</h2>
+            <p>These options control how Nmap discovers live hosts before port scanning them. Use <code>-sn</code> to only perform host discovery without port scanning.</p>
+             <dl>
+                <dt><code>-sn</code> (No port scan)</dt>
+                <dd>Performs only host discovery (ping scan). Prints available hosts responding to discovery probes. Good for quickly mapping a network.
+                    <pre><code>nmap -sn 192.168.1.0/24</code></pre>
+                </dd>
+
+                 <dt><code>-Pn</code> (No ping - Treat all hosts as online)</dt>
+                 <dd>Skips the host discovery stage entirely. Scans every target IP address as if it were online. Useful if hosts block ping probes, but can be very slow and generate noise if many targets are offline.
+                    <pre><code>nmap -Pn 192.168.1.10</code></pre>
+                 </dd>
+
+                <dt><code>-PS[portlist]</code> (TCP SYN Ping)</dt>
+                <dd>Sends SYN packets to common ports (default 80). A SYN/ACK or RST response indicates the host is up. Requires root/administrator privileges.
+                    <pre><code>nmap -PS80,443 192.168.1.0/24</code></pre>
+                </dd>
+
+                <dt><code>-PA[portlist]</code> (TCP ACK Ping)</dt>
+                <dd>Sends ACK packets (default 80). A RST response indicates the host is up. Can sometimes bypass firewalls that block SYN pings. Requires root/administrator privileges.
+                    <pre><code>nmap -PA22,80 192.168.1.1-50</code></pre>
+                </dd>
+
+                <dt><code>-PU[portlist]</code> (UDP Ping)</dt>
+                <dd>Sends UDP packets to specified ports (default 40125). An ICMP port unreachable error indicates the host is up (or no response might also mean up, depending on firewall). Requires root/administrator privileges.
+                    <pre><code>nmap -PU53,161 192.168.1.0/24</code></pre>
+                </dd>
+
+                <dt><code>-PE; -PP; -PM</code> (ICMP Ping Types)</dt>
+                <dd><code>-PE</code> (Echo), <code>-PP</code> (Timestamp), <code>-PM</code> (Netmask) request pings. Standard ICMP discovery probes.
+                    <pre><code>nmap -PE 192.168.1.1</code></pre>
+                </dd>
+
+                 <dt><code>-PR[portlist]</code> (ARP Ping)</dt>
+                <dd>Sends ARP requests to hosts on the local Ethernet network. Very fast and reliable for local network discovery. Requires root/administrator privileges. Nmap uses this automatically on local networks if possible.
+                    <pre><code>nmap -sn -PR 192.168.1.0/24</code></pre>
+                </dd>
+
+                 <dt><code>--disable-arp-ping</code></dt>
+                 <dd>Disables the use of ARP ping even on local networks.</dd>
+
+                 <dt><code>-n</code> (No DNS resolution)</dt>
+                 <dd>Tells Nmap never to do reverse DNS resolution on the active IP addresses it finds. Faster scans.</dd>
+                 <dt><code>-R</code> (DNS resolution for all targets)</dt>
+                 <dd>Tells Nmap always to do reverse DNS resolution on the target IP addresses. Default is to resolve only for responsive hosts.</dd>
+            </dl>
+        </section>
+
+        <!-- Add the rest of the Nmap sections here (Scan Techniques, Port Spec, etc.) -->
+        <!-- They are omitted for brevity but should be included as in the previous version -->
+        <!-- ... -->
+        <section id="scan-techniques">
+            <h2>Scan Techniques</h2>
+            <p>Specify which type of port scan Nmap should perform.</p>
+            <dl>
+                <dt><code>-sS</code> (TCP SYN Scan)</dt>
+                <dd>Default and most popular scan option. Stealthy, fast, and works against any compliant TCP stack. Requires root/administrator privileges. Doesn't complete TCP connections.
+                    <pre><code>nmap -sS scanme.nmap.org</code></pre>
+                </dd>
+                 <dt><code>-sT</code> (TCP Connect Scan)</dt>
+                <dd>Default if SYN scan isn't available (i.e., non-root user). Completes the TCP three-way handshake. Less stealthy and easily logged.
+                    <pre><code>nmap -sT scanme.nmap.org</code></pre>
+                </dd>
+                 <dt><code>-sU</code> (UDP Scan)</dt>
+                <dd>Scans UDP ports. Much slower than TCP scans due to UDP's connectionless nature and potential rate limiting. Often combined with <code>-sV</code> for version detection. Requires root/administrator privileges for efficiency.
+                    <pre><code>nmap -sU -p 53,161,162 192.168.1.1</code></pre>
+                </dd>
+                </dl>
+        </section>
+         <section id="port-spec">
+            <h2>Port Specification and Scan Order</h2>
+             <p>Control which ports are scanned and in what order.</p>
+            <dl>
+                <dt><code>-p &lt;port ranges&gt;</code></dt>
+                <dd>Scan only specified ports. Example ranges: <code>-p 22</code>, <code>-p 1-1000</code>, <code>-p U:53,111,137,T:21-25,80,139,8080</code>, <code>-p '*'</code> (all ports).
+                    <pre><code>nmap -p 80,443,8080 192.168.1.1</code></pre>
+                    <pre><code>nmap -p 1-65535 192.168.1.1</code></pre>
+                    <pre><code>nmap -p U:53,T:22,80 192.168.1.1</code></pre>
+                </dd>
+                 <dt><code>--exclude-ports &lt;port ranges&gt;</code></dt>
+                <dd>Exclude specified ports from the scan.
+                    <pre><code>nmap -p 1-1000 --exclude-ports 80,443 192.168.1.1</code></pre>
+                </dd>
+                 <dt><code>-F</code> (Fast scan)</dt>
+                <dd>Scans fewer ports than the default scan (the 100 most common ports). Faster than scanning all 65535 ports.
+                    <pre><code>nmap -F 192.168.1.0/24</code></pre>
+                </dd>
+             </dl>
+        </section>
+         <section id="version-detection">
+            <h2>Service and Version Detection</h2>
+            <p>Probe open ports to determine service and version information.</p>
+            <dl>
+                <dt><code>-sV</code> (Version detection)</dt>
+                <dd>Probes open ports to determine service/version info.
+                    <pre><code>nmap -sV scanme.nmap.org</code></pre>
+                </dd>
+                 <dt><code>--version-intensity &lt;level&gt;</code></dt>
+                <dd>Set intensity level from 0 (light) to 9 (try all probes). Default is 7. Higher values are more likely to identify services but take longer and are noisier.
+                    <pre><code>nmap -sV --version-intensity 9 192.168.1.1</code></pre>
+                </dd>
+             </dl>
+        </section>
+        <section id="os-detection">
+            <h2>OS Detection</h2>
+            <p>Attempt to determine the operating system of the target host.</p>
+            <dl>
+                <dt><code>-O</code> (Enable OS detection)</dt>
+                <dd>Requires at least one open and one closed TCP port to be found. Needs root/administrator privileges.
+                    <pre><code>nmap -O scanme.nmap.org</code></pre>
+                </dd>
+                <dt><code>--osscan-limit</code></dt>
+                <dd>Limit OS detection to promising targets (those with open/closed ports).</dd>
+            </dl>
+        </section>
+         <section id="nse">
+            <h2>NSE (Nmap Scripting Engine)</h2>
+            <p>Use powerful scripts to automate a wide variety of networking tasks.</p>
+             <dl>
+                 <dt><code>-sC</code> or <code>--script=default</code></dt>
+                 <dd>Run the default set of scripts. Considered safe, useful, and not too intrusive. Often run with <code>-sV</code>.
+                    <pre><code>nmap -sC -sV scanme.nmap.org</code></pre>
+                 </dd>
+                  <dt><code>--script=&lt;scriptname|category|directory|expression&gt;,...</code></dt>
+                <dd>Run specific scripts, categories (like <code>vuln</code>, <code>discovery</code>, <code>safe</code>, <code>intrusive</code>), scripts in a directory, or a boolean expression.
+                    <pre><code>nmap --script=http-title 192.168.1.1</code></pre>
+                    </dl>
+        </section>
+        <section id="timing">
+            <h2>Timing and Performance</h2>
+            <p>Adjust scan timing to balance speed and stealth/reliability.</p>
+             <dl>
+                <dt><code>-T&lt;0-5&gt;</code> (Timing template)</dt>
+                <dd>Set timing template (higher is faster).
+                    <ul>
+                        <li><code>-T0</code>: Paranoid</li>
+                        <li><code>-T1</code>: Sneaky</li>
+                        <li><code>-T2</code>: Polite</li>
+                        <li><code>-T3</code>: Normal (default)</li>
+                        <li><code>-T4</code>: Aggressive</li>
+                        <li><code>-T5</code>: Insane</li>
+                    </ul>
+                    <pre><code>nmap -T4 scanme.nmap.org</code></pre>
+                </dd>
+                </dl>
+        </section>
+         <section id="evasion">
+            <h2>Firewall/IDS Evasion and Spoofing</h2>
+             <p>Techniques to potentially bypass security measures (use responsibly and legally!).</p>
+             <dl>
+                 <dt><code>-f</code> (fragment packets); <code>--mtu &lt;val&gt;</code></dt>
+                 <dd>Split packets into smaller fragments. May evade packet filters.
+                    <pre><code>nmap -f 192.168.1.1</code></pre>
+                 </dd>
+                <dt><code>-D &lt;decoy1,decoy2[,ME],...&gt;</code> (Decoy scan)</dt>
+                <dd>Scan from multiple spoofed source IP addresses (decoys) to obscure the real source (<code>ME</code>).
+                    <pre><code>nmap -D RND:10,ME target.example.com</code></pre>
+                </dd>
+                </dl>
+        </section>
+        <section id="output">
+            <h2>Output Formats</h2>
+            <p>Control how Nmap saves the scan results.</p>
+            <dl>
+                <dt><code>-oN &lt;filespec&gt;</code> (Normal output)</dt>
+                <dd>Save output in normal, human-readable format.
+                    <pre><code>nmap -oN scan_results.txt scanme.nmap.org</code></pre>
+                </dd>
+                 <dt><code>-oX &lt;filespec&gt;</code> (XML output)</dt>
+                <dd>Save output in XML format.
+                    <pre><code>nmap -oX scan_results.xml scanme.nmap.org</code></pre>
+                </dd>
+                 <dt><code>-oA &lt;basename&gt;</code> (Output All formats)</dt>
+                <dd>Save output in Normal (<code>.nmap</code>), XML (<code>.xml</code>), and Grepable (<code>.gnmap</code>) formats at once.
+                    <pre><code>nmap -oA scan_results scanme.nmap.org</code></pre>
+                </dd>
+            </dl>
+        </section>
+         <section id="misc">
+            <h2>Miscellaneous Options</h2>
+            <dl>
+                <dt><code>-6</code> (Enable IPv6 scanning)</dt>
+                <dd>Required for scanning IPv6 targets.
+                    <pre><code>nmap -6 fc00::1</code></pre>
+                 </dd>
+                <dt><code>-A</code> (Aggressive scan options)</dt>
+                <dd>Enables OS detection (<code>-O</code>), version scanning (<code>-sV</code>), script scanning (<code>-sC</code>), and traceroute (<code>--traceroute</code>).
+                    <pre><code>nmap -A scanme.nmap.org</code></pre>
+                </dd>
+                 <dt><code>-V</code> (Print version number)</dt>
+                <dd>Prints the Nmap version and exits.</dd>
+                 <dt><code>-h</code> (Print help summary page)</dt>
+                <dd>Prints a short help screen.</dd>
+            </dl>
+        </section>
+
+
+    </div> <!-- /container -->
+
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const body = document.body;
+        const themeIcon = themeToggleBtn.querySelector('.icon');
+        const searchInput = document.getElementById('search-input');
+        const contentContainer = document.querySelector('.container');
+        const noResultsDiv = document.getElementById('no-results');
+
+        // --- Search Functionality ---
+        function handleSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const allOptions = contentContainer.querySelectorAll('dl dt'); // Get all option terms
+            let resultsFound = false;
+
+            allOptions.forEach(dtElement => {
+                const ddElement = dtElement.nextElementSibling; // Get the corresponding description
+                const dtText = dtElement.textContent.toLowerCase();
+                const ddText = ddElement ? ddElement.textContent.toLowerCase() : '';
+                const combinedText = dtText + ' ' + ddText; // Search in both term and description
+
+                const isMatch = combinedText.includes(searchTerm);
+
+                // Toggle visibility based on match
+                // Using class is often cleaner than direct style manipulation
+                dtElement.classList.toggle('hidden', !isMatch);
+                if (ddElement) {
+                    ddElement.classList.toggle('hidden', !isMatch);
+                }
+
+                if (isMatch) {
+                    resultsFound = true;
+                }
+            });
+
+            // Show/hide the "No results" message
+             noResultsDiv.style.display = resultsFound ? 'none' : 'block';
+        }
+
+        searchInput.addEventListener('input', handleSearch);
+
+        // --- Theme Toggling ---
+        function updateBodyClassForSidebar() {
+            if (window.innerWidth <= 992) {
+                body.classList.add('no-sidebar');
+            } else {
+                body.classList.remove('no-sidebar');
+            }
+        }
+
+        function applyTheme(theme) {
+            const rootStyle = document.documentElement; // Get root element for setting variables
+            if (theme === 'dark') {
+                body.classList.add('dark-theme');
+                rootStyle.style.setProperty('--bg-rgb', '26, 29, 36');
+                rootStyle.style.setProperty('--primary-rgb', '93, 173, 226');
+                themeIcon.textContent = '☀️';
+                themeToggleBtn.setAttribute('aria-label', 'Switch to light theme');
+                if (typeof updateThreeTheme === 'function') {
+                    updateThreeTheme(true);
+                }
+            } else {
+                body.classList.remove('dark-theme');
+                rootStyle.style.setProperty('--bg-rgb', '244, 247, 249');
+                rootStyle.style.setProperty('--primary-rgb', '52, 152, 219');
+                themeIcon.textContent = '🌓';
+                themeToggleBtn.setAttribute('aria-label', 'Switch to dark theme');
+                 if (typeof updateThreeTheme === 'function') {
+                    updateThreeTheme(false);
+                }
+            }
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            const isDark = body.classList.contains('dark-theme');
+            const newTheme = isDark ? 'light' : 'dark';
+            applyTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // --- Initial Theme Load ---
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+        applyTheme(initialTheme);
+
+
+        // --- Three.js Background ---
+        let scene, camera, renderer, particles, material;
+        let particleColor = 0x3498db;
+
+        function initThree() {
+            const container = document.getElementById('canvas-container');
+            if (!container) return;
+
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 30;
+
+            renderer = new THREE.WebGLRenderer({ alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            const particleCount = 5000;
+            const positions = new Float32Array(particleCount * 3);
+            const geometry = new THREE.BufferGeometry();
+
+            for (let i = 0; i < particleCount * 3; i++) {
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos((Math.random() * 2) - 1);
+                const radius = 30 + Math.random() * 30;
+                positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+                positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+                positions[i * 3 + 2] = radius * Math.cos(phi);
+             }
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+            const initialIsDark = document.body.classList.contains('dark-theme');
+            const rootStyle = getComputedStyle(document.documentElement);
+            particleColor = parseInt(rootStyle.getPropertyValue('--three-particle-color').trim().replace('#', '0x'), 16);
+
+            material = new THREE.PointsMaterial({
+                color: particleColor,
+                size: 0.15,
+                sizeAttenuation: true
+            });
+            particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+
+            window.addEventListener('resize', onWindowResize, false);
+            updateBodyClassForSidebar(); // Initial check
+
+            animate();
+        }
+
+        function onWindowResize() {
+            if(!camera || !renderer) return; // Check if Three objects exist
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            updateBodyClassForSidebar(); // Check sidebar visibility
+        }
+
+        function animate() {
+            if(!renderer) return; // Check if renderer exists
+            requestAnimationFrame(animate);
+            if (particles) {
+                particles.rotation.x += 0.0001;
+                particles.rotation.y += 0.0002;
+            }
+            renderer.render(scene, camera);
+        }
+
+        function updateThreeTheme(isDark) {
+             if (!material) return; // Check if material exists
+            const rootStyle = getComputedStyle(document.documentElement);
+            const newColorHex = rootStyle.getPropertyValue('--three-particle-color').trim();
+            particleColor = parseInt(newColorHex.replace('#', '0x'), 16);
+            material.color.setHex(particleColor);
+            material.needsUpdate = true;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+             initThree();
+             // Ensure initial search state is applied if input has value (e.g. browser autofill)
+             if (searchInput.value) {
+                 handleSearch();
+             }
+        });
+
+    </script>
+
+</body>
+</html>

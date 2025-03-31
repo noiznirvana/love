@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML/CSS/JS Editor</title>
+
+    <!-- CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/material-palenight.min.css"> <!-- Choose a theme -->
+
+    <style>
+        /* Basic Reset & Layout */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            height: 100vh; /* Full viewport height */
+            overflow: hidden; /* Prevent body scroll */
+        }
+
+        .editor-container {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1; /* Take remaining height */
+            background-color: #fff;
+            overflow: hidden;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 8px 10px;
+            background-color: #eee;
+            border-bottom: 1px solid #ccc;
+            flex-shrink: 0; /* Prevent toolbar from shrinking */
+        }
+         .toolbar .button-group {
+            display: flex;
+            gap: 5px;
+            padding-right: 10px;
+            margin-right: 5px;
+            border-right: 1px solid #ccc;
+        }
+         .toolbar .button-group:last-child { border-right: none; margin-right: 0; padding-right: 0; }
+         .toolbar button {
+            padding: 5px 10px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            min-width: 35px;
+            text-align: center;
+            transition: background-color 0.2s ease;
+        }
+         .toolbar button:hover { background-color: #e0e0e0; }
+         .toolbar button:active { background-color: #d0d0d0; }
+         .toolbar button#newFileBtn,
+         .toolbar button#openFileBtn,
+         .toolbar button#saveFileBtn { background-color: #d4edda; border-color: #c3e6cb; }
+         .toolbar button#newFileBtn:hover,
+         .toolbar button#openFileBtn:hover,
+         .toolbar button#saveFileBtn:hover { background-color: #c3e6cb; }
+         .toolbar button[data-command="italic"] { font-style: italic; }
+         .toolbar button[data-command="underline"] { text-decoration: underline; }
+
+
+        /* Main Content Area (Editors + Preview) */
+        .main-content {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden; /* Prevent overflow */
+            border-top: 1px solid #ccc;
+        }
+
+        .editor-pane {
+            display: flex;
+            flex-direction: column;
+            width: 50%; /* Adjust as needed */
+            overflow: hidden;
+            border-right: 1px solid #ccc;
+        }
+
+        .editor-section {
+            flex: 1; /* Distribute space equally */
+            display: flex;
+            flex-direction: column;
+            min-height: 100px; /* Ensure visibility */
+            overflow: hidden; /* Contain CodeMirror */
+            border-bottom: 1px solid #ccc;
+        }
+        .editor-section:last-child {
+            border-bottom: none;
+        }
+
+        .editor-section label {
+            font-size: 12px;
+            font-weight: bold;
+            padding: 4px 8px;
+            background-color: #f0f0f0;
+            border-bottom: 1px solid #ccc;
+            display: block;
+        }
+
+        /* WYSIWYG Specific */
+        #html-editor-wysiwyg {
+            min-height: 150px; /* Starting height */
+            padding: 10px;
+            outline: none;
+            overflow-y: auto; /* Scroll within its area */
+            flex-grow: 1; /* Take available space in its section */
+            font-size: 14px;
+            line-height: 1.5;
+        }
+         #html-editor-wysiwyg:empty::before { /* Placeholder */
+             content: 'Start typing HTML content here...';
+             color: #aaa;
+             pointer-events: none;
+        }
+
+        /* CodeMirror Specific */
+        .CodeMirror {
+            height: 100% !important; /* Fill the container */
+            font-size: 13px;
+            line-height: 1.4;
+            flex-grow: 1; /* Ensure it fills vertical space */
+        }
+
+        .preview-pane {
+            width: 50%; /* Adjust as needed */
+            overflow: hidden;
+            display: flex; /* To allow iframe to grow */
+             flex-direction: column;
+        }
+         .preview-pane label {
+             font-size: 12px;
+             font-weight: bold;
+             padding: 4px 8px;
+             background-color: #f0f0f0;
+             border-bottom: 1px solid #ccc;
+             display: block;
+             flex-shrink: 0; /* Prevent label shrinking */
+         }
+
+        #preview-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: #fff;
+            flex-grow: 1; /* Take remaining space */
+        }
+
+        /* Responsive adjustments (simplified for this structure) */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column; /* Stack panes vertically */
+            }
+            .editor-pane, .preview-pane {
+                width: 100%;
+                height: 50%; /* Split height */
+                border-right: none;
+                border-bottom: 1px solid #ccc;
+            }
+             .preview-pane { border-bottom: none;}
+             .editor-section { min-height: 80px; } /* Adjust minimum heights */
+             #html-editor-wysiwyg { min-height: 100px; }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Hidden file input -->
+    <input type="file" id="fileInput" accept=".html, .htm" style="display: none;">
+
+    <div class="editor-container">
+        <!-- WYSIWYG Toolbar (Optional - keep if useful for HTML Body) -->
+        <div class="toolbar">
+            <div class="button-group">
+                <button type="button" id="newFileBtn" title="New Document">New</button>
+                <button type="button" id="openFileBtn" title="Open HTML File">Open</button>
+                <button type="button" id="saveFileBtn" title="Save as HTML">Save</button>
+            </div>
+             <!-- WYSIWYG Formatting Toolbar (acts on #html-editor-wysiwyg) -->
+            <div class="button-group">
+                 <button type="button" data-command="bold" title="Bold (Ctrl+B)">B</button>
+                 <button type="button" data-command="italic" title="Italic (Ctrl+I)">I</button>
+                 <button type="button" data-command="underline" title="Underline (Ctrl+U)">U</button>
+                 <button type="button" data-command="strikeThrough" title="Strikethrough">S</button>
+            </div>
+            <div class="button-group">
+                 <button type="button" data-command="formatBlock" data-value="p" title="Paragraph">P</button>
+                 <button type="button" data-command="formatBlock" data-value="h1" title="Heading 1">H1</button>
+                 <button type="button" data-command="formatBlock" data-value="h2" title="Heading 2">H2</button>
+                 <button type="button" data-command="formatBlock" data-value="h3" title="Heading 3">H3</button>
+                 <button type="button" data-command="formatBlock" data-value="blockquote" title="Blockquote">"</button>
+            </div>
+             <div class="button-group">
+                <button type="button" data-command="justifyLeft" title="Align Left">Left</button>
+                <button type="button" data-command="justifyCenter" title="Align Center">Center</button>
+                <button type="button" data-command="justifyRight" title="Align Right">Right</button>
+            </div>
+            <div class="button-group">
+                 <button type="button" data-command="insertUnorderedList" title="Unordered List">UL</button>
+                 <button type="button" data-command="insertOrderedList" title="Ordered List">OL</button>
+            </div>
+             <div class="button-group">
+                 <button type="button" id="insertImageBtnWysiwyg" title="Insert Image (WYSIWYG)">Img</button>
+                 <button type="button" data-command="createLink" title="Insert Link (WYSIWYG)">Link</button>
+                 <button type="button" data-command="unlink" title="Remove Link (WYSIWYG)">Unlink</button>
+            </div>
+             <div class="button-group">
+                 <button type="button" data-command="undo" title="Undo (WYSIWYG)">Undo</button>
+                 <button type="button" data-command="redo" title="Redo (WYSIWYG)">Redo</button>
+             </div>
+             <!-- Add other WYSIWYG buttons as needed -->
+        </div>
+
+        <div class="main-content">
+            <div class="editor-pane">
+                <div class="editor-section">
+                    <label for="html-editor-wysiwyg">HTML Body (WYSIWYG)</label>
+                    <div id="html-editor-wysiwyg" contenteditable="true"></div>
+                </div>
+                <div class="editor-section">
+                    <label for="css-editor">CSS</label>
+                    <textarea id="css-editor"></textarea>
+                </div>
+                <div class="editor-section">
+                    <label for="js-editor">JavaScript</label>
+                    <textarea id="js-editor"></textarea>
+                </div>
+            </div>
+            <div class="preview-pane">
+                 <label for="preview-frame">Live Preview</label>
+                 <iframe id="preview-frame"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- CodeMirror JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/htmlmixed/htmlmixed.min.js"></script>
+
+    <script>
+        // --- Configuration & Elements ---
+        const wysiwygEditor = document.getElementById('html-editor-wysiwyg');
+        const cssTextArea = document.getElementById('css-editor');
+        const jsTextArea = document.getElementById('js-editor');
+        const previewFrame = document.getElementById('preview-frame');
+        const fileInput = document.getElementById('fileInput');
+        const toolbar = document.querySelector('.toolbar');
+
+        const debounceDelay = 300; // ms delay for preview update debounce
+
+        // --- Sample Content ---
+        const sampleHTML = `<h1>Welcome!</h1>
+<p>Edit HTML here using the toolbar or type directly.</p>
+<p>Use the panes below to add <b>CSS</b> and <i>JavaScript</i>.</p>
+<button onclick="greet()">Click Me</button>`;
+        const sampleCSS = `body {
+  font-family: sans-serif;
+  padding: 15px;
+  background-color: #f0f8ff; /* AliceBlue */
+}
+h1 {
+  color: navy;
+}
+button {
+    padding: 10px 15px;
+    cursor: pointer;
+    background-color: lightgreen;
+    border: 1px solid darkgreen;
+    border-radius: 5px;
+}`;
+        const sampleJS = `function greet() {
+  alert('Hello from JavaScript!');
+}`;
+
+        // --- Initialize CodeMirror Editors ---
+        const cssEditor = CodeMirror.fromTextArea(cssTextArea, {
+            lineNumbers: true,
+            mode: 'css',
+            theme: 'material-palenight',
+            lineWrapping: true,
+        });
+
+        const jsEditor = CodeMirror.fromTextArea(jsTextArea, {
+            lineNumbers: true,
+            mode: 'javascript',
+            theme: 'material-palenight',
+            lineWrapping: true,
+        });
+
+        // --- State Variables ---
+        let currentHTML = sampleHTML;
+        let currentCSS = sampleCSS;
+        let currentJS = sampleJS;
+        let previewTimeout;
+
+        // --- Update Preview Function (Debounced) ---
+        function updatePreview() {
+            clearTimeout(previewTimeout); // Clear previous timeout
+            previewTimeout = setTimeout(() => {
+                const source = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <style>
+                            ${currentCSS}
+                        </style>
+                    </head>
+                    <body>
+                        ${currentHTML}
+                        <script>
+                            try {
+                                ${currentJS}
+                            } catch (error) {
+                                console.error("JS Error in Preview:", error);
+                                // Optional: Display error in preview body
+                                // document.body.innerHTML += '<pre style="color:red; background:pink; padding: 5px;">JS Error: ' + error + '</pre>';
+                            }
+                        <\/script>
+                        </body>
+                    </html>
+                `;
+                // Use srcdoc for security and simplicity
+                previewFrame.setAttribute('srcdoc', source);
+                 console.log("Preview updated.");
+            }, debounceDelay);
+        }
+
+
+        // --- Event Listeners for Editors ---
+        wysiwygEditor.addEventListener('input', () => {
+            currentHTML = wysiwygEditor.innerHTML;
+            updatePreview();
+        });
+
+        cssEditor.on('change', (instance) => {
+            currentCSS = instance.getValue();
+            updatePreview();
+        });
+
+        jsEditor.on('change', (instance) => {
+            currentJS = instance.getValue();
+            updatePreview();
+        });
+
+        // --- WYSIWYG Toolbar Logic ---
+         toolbar.addEventListener('click', (e) => {
+            const targetButton = e.target.closest('button[data-command]');
+            if (!targetButton) return; // Exit if not a standard command button
+
+            // Ensure the click isn't on file/custom buttons handled elsewhere
+            if (targetButton.id === 'newFileBtn' || targetButton.id === 'openFileBtn' || targetButton.id === 'saveFileBtn' || targetButton.id === 'insertImageBtnWysiwyg') {
+                return;
+            }
+
+            const command = targetButton.dataset.command;
+            const value = targetButton.dataset.value || null;
+
+            e.preventDefault();
+            wysiwygEditor.focus(); // Focus the WYSIWYG editor
+
+            if (command === 'createLink') {
+                const selection = window.getSelection();
+                 if (!selection || selection.rangeCount === 0 || selection.getRangeAt(0).collapsed) {
+                     alert("Please select the text in the HTML Body editor to make a link.");
+                     return;
+                 }
+                const url = prompt('Enter the link URL:', 'https://');
+                if (url) {
+                    document.execCommand(command, false, url);
+                }
+            } else {
+                document.execCommand(command, false, value);
+            }
+             // Trigger preview update after command execution
+             currentHTML = wysiwygEditor.innerHTML; // Update state immediately
+             updatePreview();
+        });
+
+         // Custom WYSIWYG Image Button
+         const insertImageBtnWysiwyg = document.getElementById('insertImageBtnWysiwyg');
+         if (insertImageBtnWysiwyg) {
+             insertImageBtnWysiwyg.addEventListener('click', (e) => {
+                 e.preventDefault();
+                 wysiwygEditor.focus();
+                 const url = prompt('Enter image URL:');
+                 if (url) {
+                     if (url.trim().toLowerCase().startsWith('javascript:')) {
+                         alert('Invalid URL protocol.');
+                         return;
+                     }
+                     const imgHTML = `<img src="${encodeURI(url)}" alt="User Image" style="max-width: 100%;">`;
+                     document.execCommand('insertHTML', false, imgHTML);
+                     // Trigger update
+                      currentHTML = wysiwygEditor.innerHTML;
+                      updatePreview();
+                 }
+             });
+         }
+
+
+        // --- File Operations ---
+         function hasUnsavedChanges() {
+             // Basic check against initial sample state or last loaded/saved state
+             // For simplicity, we compare with the initial samples here. A more robust
+             // implementation would track a "dirty" flag or compare against last saved state.
+             return wysiwygEditor.innerHTML.trim() !== sampleHTML.trim() ||
+                    cssEditor.getValue().trim() !== sampleCSS.trim() ||
+                    jsEditor.getValue().trim() !== sampleJS.trim();
+         }
+
+         function resetToSampleContent() {
+             currentHTML = sampleHTML;
+             currentCSS = sampleCSS;
+             currentJS = sampleJS;
+
+             wysiwygEditor.innerHTML = currentHTML;
+             cssEditor.setValue(currentCSS);
+             jsEditor.setValue(currentJS);
+
+             // Refresh CodeMirror instances if needed (usually setValue is enough)
+             cssEditor.refresh();
+             jsEditor.refresh();
+
+             wysiwygEditor.focus();
+             fileInput.value = null;
+             updatePreview(); // Update preview immediately
+             console.log("Editor reset to sample content.");
+         }
+
+        // New File Button
+        document.getElementById('newFileBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            // Simple check for this example
+             if (wysiwygEditor.innerHTML || cssEditor.getValue() || jsEditor.getValue()) {
+                 if (!confirm('Are you sure? Unsaved changes will be lost.')) {
+                     return;
+                 }
+             }
+            resetToSampleContent();
+        });
+
+        // Open File Button
+        document.getElementById('openFileBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+             if (wysiwygEditor.innerHTML || cssEditor.getValue() || jsEditor.getValue()) {
+                 if (!confirm('Opening a file will discard unsaved changes. Continue?')) {
+                     return;
+                 }
+             }
+            fileInput.click();
+        });
+
+        // Handle File Selection
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file || !file.type.match('text/html')) {
+                 if(file) alert('Please select an HTML (.html) file.');
+                 event.target.value = null; // Reset input
+                 return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const fileContent = e.target.result;
+                try {
+                    // Use DOMParser for safer parsing
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(fileContent, 'text/html');
+
+                    // Extract CSS (simple: first style tag in head)
+                    const styleElement = doc.head.querySelector('style');
+                    currentCSS = styleElement ? styleElement.innerHTML : '';
+
+                    // Extract JS (simple: first script tag in body, or last? Let's try last before closing body)
+                     const scriptElements = doc.body.querySelectorAll('script');
+                     const lastScriptElement = scriptElements.length > 0 ? scriptElements[scriptElements.length - 1] : null;
+                     // Ensure it's not an external script (<script src="...">)
+                     currentJS = (lastScriptElement && !lastScriptElement.hasAttribute('src')) ? lastScriptElement.innerHTML : '';
+
+                     // Remove the script we extracted from the body to avoid duplication if we save again
+                     if (lastScriptElement && !lastScriptElement.hasAttribute('src')) {
+                         lastScriptElement.remove();
+                     }
+
+
+                    // Extract HTML Body Content
+                    currentHTML = doc.body.innerHTML;
+
+                    // Update editors
+                    wysiwygEditor.innerHTML = currentHTML;
+                    cssEditor.setValue(currentCSS);
+                    jsEditor.setValue(currentJS);
+
+                    cssEditor.refresh();
+                    jsEditor.refresh();
+
+                    updatePreview(); // Update preview after loading
+                    console.log(`File "${file.name}" loaded.`);
+
+                } catch (parseError) {
+                    console.error("Error parsing HTML file:", parseError);
+                    alert(`Error parsing file "${file.name}". Loading raw content might be incomplete.`);
+                    // Fallback: Load raw into HTML body? (Less ideal)
+                    // wysiwygEditor.innerHTML = fileContent;
+                     // cssEditor.setValue('');
+                     // jsEditor.setValue('');
+                }
+            };
+            reader.onerror = (e) => {
+                console.error("Error reading file:", e);
+                alert(`Error reading file: ${file.name}`);
+            };
+            reader.readAsText(file);
+            event.target.value = null; // Reset input
+        });
+
+        // Save File Button
+        document.getElementById('saveFileBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+
+             // Get current content explicitly before constructing final HTML
+             currentHTML = wysiwygEditor.innerHTML;
+             currentCSS = cssEditor.getValue();
+             currentJS = jsEditor.getValue();
+
+             // Construct the full HTML for saving
+             const finalHtmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title> <!-- TODO: Allow title editing? -->
+    <style>
+${currentCSS}
+    </style>
+</head>
+<body>
+${currentHTML}
+
+<script>
+${currentJS}
+<\/script>
+</body>
+</html>`;
+
+            const defaultFilename = "edited_page.html";
+            const filename = prompt("Save file as:", defaultFilename);
+            if (filename === null) return;
+
+            const finalFilename = (filename.trim() || defaultFilename).replace(/(\.html)?$/, ".html");
+
+            const blob = new Blob([finalHtmlContent], { type: 'text/html;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = finalFilename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+            console.log(`Content saved as "${finalFilename}".`);
+        });
+
+
+        // --- Initial Load ---
+        resetToSampleContent(); // Load sample content initially
+         cssEditor.refresh(); // Ensure CodeMirror instances are sized correctly after initial layout
+         jsEditor.refresh();
+
+        console.log("HTML/CSS/JS Editor Initialized.");
+
+    </script>
+
+</body>
+</html>
