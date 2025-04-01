@@ -1,0 +1,902 @@
+[
+  {
+    "id": "gen1_1",
+    "reference": "Genesis 1:1",
+    "text": "In the beginning God created the heavens and the earth.",
+    "notes": "The very first verse, foundational."
+  },
+  {
+    "id": "john3_16",
+    "reference": "John 3:16",
+    "text": "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.",
+    "notes": "Perhaps the most famous verse summarizing the Gospel."
+  },
+  {
+    "id": "rom8_28",
+    "reference": "Romans 8:28",
+    "text": "And we know that in all things God works for the good of those who love him, who have been called according to his purpose.",
+    "notes": "A verse about God's sovereignty and providence."
+  },
+  {
+    "id": "phil4_13",
+    "reference": "Philippians 4:13",
+    "text": "I can do all this through him who gives me strength.",
+    "notes": "Verse about finding strength in Christ."
+  },
+  {
+    "id": "prov3_5-6",
+    "reference": "Proverbs 3:5-6",
+    "text": "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.",
+    "notes": "Guidance on trusting God."
+  },
+  {
+    "id": "jer29_11",
+    "reference": "Jeremiah 29:11",
+    "text": "For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future.",
+    "notes": "God's plans and hope."
+  },
+  {
+    "id": "matt6_33",
+    "reference": "Matthew 6:33",
+    "text": "But seek first his kingdom and his righteousness, and all these things will be given to you as well.",
+    "notes": "Priorities in life."
+  },
+  {
+    "id": "heb11_1",
+    "reference": "Hebrews 11:1",
+    "text": "Now faith is confidence in what we hope for and assurance about what we do not see.",
+    "notes": "Definition of faith."
+  },
+  {
+    "id": "2tim3_16",
+    "reference": "2 Timothy 3:16",
+    "text": "All Scripture is God-breathed and is useful for teaching, rebuking, correcting and training in righteousness,",
+    "notes": "The nature and purpose of Scripture."
+  },
+  {
+    "id": "1cor10_13",
+    "reference": "1 Corinthians 10:13",
+    "text": "No temptation has overtaken you except what is common to mankind. And God is faithful; he will not let you be tempted beyond what you can bear. But when you are tempted, he will also provide a way out so that you can endure it.",
+    "notes": "Promise regarding temptation."
+  },
+  {
+    "id": "psalm23_1",
+    "reference": "Psalm 23:1",
+    "text": "The Lord is my shepherd, I lack nothing.",
+    "notes": "Beginning of the Shepherd Psalm."
+  },
+  {
+    "id": "isa40_31",
+    "reference": "Isaiah 40:31",
+    "text": "but those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.",
+    "notes": "Strength from hoping in the Lord."
+  },
+  {
+    "id": "josh1_9",
+    "reference": "Joshua 1:9",
+    "text": "Have I not commanded you? Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.",
+    "notes": "Command to be strong and courageous."
+  },
+  {
+    "id": "eph2_8-9",
+    "reference": "Ephesians 2:8-9",
+    "text": "For it is by grace you have been saved, through faith—and this is not from yourselves, it is the gift of God— not by works, so that no one can boast.",
+    "notes": "Salvation by grace through faith."
+  },
+  {
+    "id": "gal5_22-23",
+    "reference": "Galatians 5:22-23",
+    "text": "But the fruit of the Spirit is love, joy, peace, forbearance, kindness, goodness, faithfulness, gentleness and self-control. Against such things there is no law.",
+    "notes": "The Fruit of the Spirit."
+  },
+  {
+    "id": "rom12_2",
+    "reference": "Romans 12:2",
+    "text": "Do not conform to the pattern of this world, but be transformed by the renewing of your mind. Then you will be able to test and approve what God’s will is—his good, pleasing and perfect will.",
+    "notes": "Transformation, not conformation."
+  },
+  {
+    "id": "john14_6",
+    "reference": "John 14:6",
+    "text": "Jesus answered, “I am the way and the truth and the life. No one comes to the Father except through me.",
+    "notes": "Jesus' exclusive claim."
+  },
+  {
+    "id": "acts1_8",
+    "reference": "Acts 1:8",
+    "text": "But you will receive power when the Holy Spirit comes on you; and you will be my witnesses in Jerusalem, and in all Judea and Samaria, and to the ends of the earth.",
+    "notes": "The Great Commission's power source."
+  },
+  {
+    "id": "heb12_1-2",
+    "reference": "Hebrews 12:1-2",
+    "text": "Therefore, since we are surrounded by such a great cloud of witnesses, let us throw off everything that hinders and the sin that so easily entangles. And let us run with perseverance the race marked out for us, fixing our eyes on Jesus, the pioneer and perfecter of faith.",
+    "notes": "Running the race of faith."
+  },
+  {
+    "id": "1john1_9",
+    "reference": "1 John 1:9",
+    "text": "If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness.",
+    "notes": "Confession and forgiveness."
+  },
+  {
+    "id": "matt28_19-20",
+    "reference": "Matthew 28:19-20",
+    "text": "Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit, and teaching them to obey everything I have commanded you. And surely I am with you always, to the very end of the age.",
+    "notes": "The Great Commission."
+  },
+  {
+    "id": "psalm119_105",
+    "reference": "Psalm 119:105",
+    "text": "Your word is a lamp for my feet, a light on my path.",
+    "notes": "Guidance from God's Word."
+  },
+  {
+    "id": "james1_5",
+    "reference": "James 1:5",
+    "text": "If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault, and it will be given to you.",
+    "notes": "Asking God for wisdom."
+  },
+  {
+    "id": "1peter5_7",
+    "reference": "1 Peter 5:7",
+    "text": "Cast all your anxiety on him because he cares for you.",
+    "notes": "Dealing with anxiety."
+  },
+  {
+    "id": "psalm46_10",
+    "reference": "Psalm 46:10",
+    "text": "He says, “Be still, and know that I am God; I will be exalted among the nations, I will be exalted in the earth.”",
+    "notes": "Finding rest and acknowledging God."
+  },
+  {
+    "id": "mark10_45",
+    "reference": "Mark 10:45",
+    "text": "For even the Son of Man did not come to be served, but to serve, and to give his life as a ransom for many.",
+    "notes": "Jesus' purpose: service and ransom."
+  },
+  {
+    "id": "col3_23",
+    "reference": "Colossians 3:23",
+    "text": "Whatever you do, work at it with all your heart, as working for the Lord, not for human masters,",
+    "notes": "Work ethic for believers."
+  },
+  {
+    "id": "psalm37_4",
+    "reference": "Psalm 37:4",
+    "text": "Take delight in the Lord, and he will give you the desires of your heart.",
+    "notes": "Delighting in God."
+  },
+  {
+    "id": "isa41_10",
+    "reference": "Isaiah 41:10",
+    "text": "So do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you; I will uphold you with my righteous right hand.",
+    "notes": "God's presence and help in fear."
+  },
+  {
+    "id": "rom10_9",
+    "reference": "Romans 10:9",
+    "text": "If you declare with your mouth, “Jesus is Lord,” and believe in your heart that God raised him from the dead, you will be saved.",
+    "notes": "Confession and belief for salvation."
+  },
+  {
+    "id": "john1_1",
+    "reference": "John 1:1",
+    "text": "In the beginning was the Word, and the Word was with God, and the Word was God.",
+    "notes": "The divinity of Christ (The Word)."
+  },
+  {
+    "id": "micah6_8",
+    "reference": "Micah 6:8",
+    "text": "He has shown you, O mortal, what is good. And what does the Lord require of you? To act justly and to love mercy and to walk humbly with your God.",
+    "notes": "God's requirement: justice, mercy, humility."
+  },
+  {
+    "id": "1cor13_4-7",
+    "reference": "1 Corinthians 13:4-7",
+    "text": "Love is patient, love is kind. It does not envy, it does not boast, it is not proud. It does not dishonor others, it is not self-seeking, it is not easily angered, it keeps no record of wrongs. Love does not delight in evil but rejoices with the truth. It always protects, always trusts, always hopes, always perseveres.",
+    "notes": "Description of true love."
+  },
+  {
+    "id": "matt5_16",
+    "reference": "Matthew 5:16",
+    "text": "In the same way, let your light shine before others, that they may see your good deeds and glorify your Father in heaven.",
+    "notes": "Being a light in the world."
+  },
+  {
+    "id": "heb4_12",
+    "reference": "Hebrews 4:12",
+    "text": "For the word of God is alive and active. Sharper than any double-edged sword, it penetrates even to dividing soul and spirit, joints and marrow; it judges the thoughts and attitudes of the heart.",
+    "notes": "The power of God's Word."
+  },
+  {
+    "id": "psalm19_14",
+    "reference": "Psalm 19:14",
+    "text": "May these words of my mouth and this meditation of my heart be pleasing in your sight, Lord, my Rock and my Redeemer.",
+    "notes": "A prayer for acceptable thoughts and words."
+  },
+  {
+    "id": "2cor5_17",
+    "reference": "2 Corinthians 5:17",
+    "text": "Therefore, if anyone is in Christ, the new creation has come: The old has gone, the new is here!",
+    "notes": "New creation in Christ."
+  },
+  {
+    "id": "prov16_9",
+    "reference": "Proverbs 16:9",
+    "text": "In their hearts humans plan their course, but the Lord establishes their steps.",
+    "notes": "Human plans vs. God's sovereignty."
+  },
+  {
+    "id": "john16_33",
+    "reference": "John 16:33",
+    "text": "I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world.",
+    "notes": "Peace in Christ despite worldly troubles."
+  },
+  {
+    "id": "1thess5_16-18",
+    "reference": "1 Thessalonians 5:16-18",
+    "text": "Rejoice always, pray continually, give thanks in all circumstances; for this is God’s will for you in Christ Jesus.",
+    "notes": "Instructions: rejoice, pray, give thanks."
+  },
+  {
+    "id": "psalm139_14",
+    "reference": "Psalm 139:14",
+    "text": "I praise you because I am fearfully and wonderfully made; your works are wonderful, I know that full well.",
+    "notes": "Praise for God's creation of self."
+  },
+  {
+    "id": "matt11_28",
+    "reference": "Matthew 11:28",
+    "text": "Come to me, all you who are weary and burdened, and I will give you rest.",
+    "notes": "Jesus' invitation to the weary."
+  },
+  {
+    "id": "rom3_23",
+    "reference": "Romans 3:23",
+    "text": "for all have sinned and fall short of the glory of God,",
+    "notes": "Universal sinfulness."
+  },
+  {
+    "id": "rom6_23",
+    "reference": "Romans 6:23",
+    "text": "For the wages of sin is death, but the gift of God is eternal life in Christ Jesus our Lord.",
+    "notes": "Consequences of sin vs. gift of God."
+  },
+  {
+    "id": "eph6_11",
+    "reference": "Ephesians 6:11",
+    "text": "Put on the full armor of God, so that you can take your stand against the devil’s schemes.",
+    "notes": "Spiritual warfare: Armor of God."
+  },
+  {
+    "id": "1john4_19",
+    "reference": "1 John 4:19",
+    "text": "We love because he first loved us.",
+    "notes": "The source of our ability to love."
+  },
+  {
+    "id": "prov27_17",
+    "reference": "Proverbs 27:17",
+    "text": "As iron sharpens iron, so one person sharpens another.",
+    "notes": "The value of fellowship and accountability."
+  },
+  {
+    "id": "luke6_31",
+    "reference": "Luke 6:31",
+    "text": "Do to others as you would have them do to you.",
+    "notes": "The Golden Rule."
+  },
+  {
+    "id": "psalm1_1-2",
+    "reference": "Psalm 1:1-2",
+    "text": "Blessed is the one who does not walk in step with the wicked or stand in the way that sinners take or sit in the company of mockers, but whose delight is in the law of the Lord, and who meditates on his law day and night.",
+    "notes": "The path of the righteous."
+  },
+  {
+    "id": "rev21_4",
+    "reference": "Revelation 21:4",
+    "text": "‘He will wipe every tear from their eyes. There will be no more death’ or mourning or crying or pain, for the old order of things has passed away.",
+    "notes": "The future hope: no more suffering."
+  },
+  {
+    "id": "gen3_15",
+    "reference": "Genesis 3:15",
+    "text": "I will put enmity between you and the woman, and between your offspring and hers; They will strike at your head, while you strike at their heel.",
+    "notes": "Protoevangelium (First Gospel). Interpreted as the first promise of a Redeemer born of a woman (Mary), who would overcome evil."
+  },
+  {
+    "id": "isa7_14",
+    "reference": "Isaiah 7:14",
+    "text": "Therefore the Lord himself will give you a sign: The virgin shall conceive and bear a son, and shall call his name Immanuel.",
+    "notes": "Prophecy of the virgin birth of the Messiah (Jesus), fulfilled in Mary."
+  },
+  {
+    "id": "micah5_2",
+    "reference": "Micah 5:2",
+    "text": "(Micah 5:1 in some versions) But you, Bethlehem Ephrathah, least among the clans of Judah, From you shall come forth for me one who is to be ruler in Israel; Whose origin is from of old, from ancient times.",
+    "notes": "Prophecy of the Messiah's birth in Bethlehem. Verse 3 refers to 'her who is to give birth'."
+  },
+  {
+    "id": "micah5_3",
+    "reference": "Micah 5:3",
+    "text": "(Micah 5:2 in some versions) Therefore the Lord will give them up, until the time when she who is to give birth has borne him. Then the rest of his kindred shall return to the children of Israel.",
+    "notes": "Directly references the mother ('she who is to give birth') of the prophesied ruler from Bethlehem."
+  },
+  {
+    "id": "luke1_26",
+    "reference": "Luke 1:26",
+    "text": "In the sixth month, the angel Gabriel was sent from God to a town of Galilee called Nazareth,",
+    "notes": "Setting the scene for the Annunciation to Mary."
+  },
+  {
+    "id": "luke1_27",
+    "reference": "Luke 1:27",
+    "text": "to a virgin betrothed to a man named Joseph, of the house of David, and the virgin’s name was Mary.",
+    "notes": "Introduction of Mary, emphasizing her virginity and lineage connection."
+  },
+  {
+    "id": "luke1_28",
+    "reference": "Luke 1:28",
+    "text": "And coming to her, he said, “Hail, favored one! [or 'full of grace'] The Lord is with you.”",
+    "notes": "Gabriel's greeting, basis for 'Hail Mary, full of grace'. Points to Mary's unique state of grace."
+  },
+  {
+    "id": "luke1_30",
+    "reference": "Luke 1:30",
+    "text": "Then the angel said to her, “Do not be afraid, Mary, for you have found favor with God.",
+    "notes": "Angel reassures Mary, affirming God's favor upon her."
+  },
+  {
+    "id": "luke1_31",
+    "reference": "Luke 1:31",
+    "text": "Behold, you will conceive in your womb and bear a son, and you shall name him Jesus.",
+    "notes": "The core message of the Annunciation: Mary is chosen to be the Mother of Jesus."
+  },
+  {
+    "id": "luke1_32",
+    "reference": "Luke 1:32",
+    "text": "He will be great and will be called Son of the Most High, and the Lord God will give him the throne of David his father,",
+    "notes": "Describes the divine nature and Messianic role of the Son Mary will bear."
+  },
+  {
+    "id": "luke1_34",
+    "reference": "Luke 1:34",
+    "text": "But Mary said to the angel, “How can this be, since I have no relations with a man?”",
+    "notes": "Mary's question affirming her virginity and seeking understanding."
+  },
+  {
+    "id": "luke1_35",
+    "reference": "Luke 1:35",
+    "text": "And the angel said to her in reply, “The holy Spirit will come upon you, and the power of the Most High will overshadow you. Therefore the child to be born will be called holy, the Son of God.",
+    "notes": "Explanation of the Virginal Conception by the power of the Holy Spirit; affirms Jesus' divinity."
+  },
+  {
+    "id": "luke1_37",
+    "reference": "Luke 1:37",
+    "text": "For nothing will be impossible for God.",
+    "notes": "The angel's statement reinforcing God's omnipotence in relation to the miraculous conception."
+  },
+  {
+    "id": "luke1_38",
+    "reference": "Luke 1:38",
+    "text": "Mary said, “Behold, I am the handmaid of the Lord. May it be done to me according to your word.” Then the angel departed from her.",
+    "notes": "Mary's Fiat - her 'yes' to God's plan, expressing total obedience and faith."
+  },
+  {
+    "id": "luke1_39",
+    "reference": "Luke 1:39",
+    "text": "During those days Mary set out and traveled to the hill country in haste to a town of Judah,",
+    "notes": "Mary begins her journey to visit Elizabeth (The Visitation)."
+  },
+  {
+    "id": "luke1_41",
+    "reference": "Luke 1:41",
+    "text": "When Elizabeth heard Mary’s greeting, the infant leaped in her womb, and Elizabeth, filled with the holy Spirit,",
+    "notes": "John the Baptist's reaction in the womb to the presence of Jesus within Mary."
+  },
+  {
+    "id": "luke1_42",
+    "reference": "Luke 1:42",
+    "text": "cried out in a loud voice and said, “Most blessed are you among women, and blessed is the fruit of your womb.",
+    "notes": "Elizabeth's inspired blessing, basis for 'Blessed art thou among women...' in the Hail Mary."
+  },
+  {
+    "id": "luke1_43",
+    "reference": "Luke 1:43",
+    "text": "And how does this happen to me, that the mother of my Lord should come to me?",
+    "notes": "Elizabeth recognizes Mary as 'Mother of my Lord,' acknowledging the divinity of the child Mary carries."
+  },
+  {
+    "id": "luke1_44",
+    "reference": "Luke 1:44",
+    "text": "For at the moment the sound of your greeting reached my ears, the infant in my womb leaped for joy.",
+    "notes": "Reiteration of John the Baptist's joyful reaction to Mary's arrival."
+  },
+  {
+    "id": "luke1_45",
+    "reference": "Luke 1:45",
+    "text": "Blessed are you who believed that what was spoken to you by the Lord would be fulfilled.",
+    "notes": "Elizabeth praises Mary's profound faith in God's promise."
+  },
+  {
+    "id": "luke1_46-47",
+    "reference": "Luke 1:46-47",
+    "text": "And Mary said: “My soul proclaims the greatness of the Lord; my spirit rejoices in God my savior.",
+    "notes": "Beginning of the Magnificat, Mary's hymn of praise, acknowledging God as her Savior."
+  },
+  {
+    "id": "luke1_48",
+    "reference": "Luke 1:48",
+    "text": "For he has looked upon his handmaid’s lowliness; behold, from now on will all ages call me blessed.",
+    "notes": "Part of the Magnificat; Mary acknowledges God's favor despite her humility and prophesies her perpetual honor."
+  },
+  {
+    "id": "luke1_49",
+    "reference": "Luke 1:49",
+    "text": "For the Mighty One has done great things for me, and holy is his name.",
+    "notes": "Part of the Magnificat; Mary praises God's power and holiness shown in His work through her."
+  },
+  {
+    "id": "luke2_7",
+    "reference": "Luke 2:7",
+    "text": "and she gave birth to her firstborn son. She wrapped him in swaddling clothes and laid him in a manger, because there was no room for them in the inn.",
+    "notes": "The Nativity; Mary gives birth to Jesus."
+  },
+  {
+    "id": "luke2_19",
+    "reference": "Luke 2:19",
+    "text": "And Mary kept all these things, reflecting on them in her heart.",
+    "notes": "Shows Mary's contemplative nature, pondering the events surrounding Jesus' birth."
+  },
+  {
+    "id": "luke2_34",
+    "reference": "Luke 2:34",
+    "text": "Simeon blessed them and said to Mary his mother, “Behold, this child is destined for the fall and rise of many in Israel, and to be a sign that will be contradicted",
+    "notes": "Simeon's prophecy at the Presentation, addressed directly to Mary."
+  },
+  {
+    "id": "luke2_35",
+    "reference": "Luke 2:35",
+    "text": "(and you yourself a sword will pierce) so that the thoughts of many hearts may be revealed.”",
+    "notes": "Simeon foretells Mary's future sorrow and share in Christ's suffering."
+  },
+  {
+    "id": "luke2_51",
+    "reference": "Luke 2:51",
+    "text": "He went down with them and came to Nazareth, and was obedient to them; and his mother kept all these things in her heart.",
+    "notes": "After finding Jesus in the Temple, highlights Jesus' obedience and Mary's continued reflection."
+  },
+  {
+    "id": "john2_1",
+    "reference": "John 2:1",
+    "text": "On the third day there was a wedding in Cana in Galilee, and the mother of Jesus was there.",
+    "notes": "Setting for the Wedding at Cana, highlighting Mary's presence."
+  },
+  {
+    "id": "john2_3",
+    "reference": "John 2:3",
+    "text": "When the wine ran short, the mother of Jesus said to him, “They have no wine.”",
+    "notes": "Mary notices the need and intercedes, bringing the problem to Jesus."
+  },
+  {
+    "id": "john2_4",
+    "reference": "John 2:4",
+    "text": "[And] Jesus said to her, “Woman, how does your concern affect me? My hour has not yet come.”",
+    "notes": "Jesus' response, often interpreted as distinguishing his divine mission from familial ties, but ultimately leading to the miracle."
+  },
+  {
+    "id": "john2_5",
+    "reference": "John 2:5",
+    "text": "His mother said to the servers, “Do whatever he tells you.”",
+    "notes": "Mary's instruction expresses complete faith in Jesus and directs others to obey Him. Seen as guidance for all disciples."
+  },
+  {
+    "id": "john19_25",
+    "reference": "John 19:25",
+    "text": "Standing by the cross of Jesus were his mother and his mother’s sister, Mary the wife of Clopas, and Mary of Magdala.",
+    "notes": "Mary's faithful presence at the foot of the Cross during Jesus' crucifixion."
+  },
+  {
+    "id": "john19_26",
+    "reference": "John 19:26",
+    "text": "When Jesus saw his mother and the disciple there whom he loved, he said to his mother, “Woman, behold, your son.”",
+    "notes": "Jesus entrusts the beloved disciple (representing the Church) to Mary's care."
+  },
+  {
+    "id": "john19_27",
+    "reference": "John 19:27",
+    "text": "Then he said to the disciple, “Behold, your mother.” And from that hour the disciple took her into his home.",
+    "notes": "Jesus entrusts Mary to the beloved disciple. Interpreted as Mary becoming the Mother of the Church/all disciples."
+  },
+  {
+    "id": "acts1_14",
+    "reference": "Acts 1:14",
+    "text": "All these devoted themselves with one accord to prayer, together with some women, and Mary the mother of Jesus, and his brothers.",
+    "notes": "Mary's presence with the Apostles in the upper room, praying before Pentecost."
+  },
+  {
+    "id": "gal4_4",
+    "reference": "Galatians 4:4",
+    "text": "But when the fullness of time had come, God sent his Son, born of a woman, born under the law,",
+    "notes": "Paul affirms the incarnation: Jesus was truly human, 'born of a woman' (Mary)."
+  },
+  {
+    "id": "rev11_19",
+    "reference": "Revelation 11:19",
+    "text": "Then God’s temple in heaven was opened, and the ark of his covenant could be seen in the temple. There were flashes of lightning, rumblings, and peals of thunder, an earthquake, and a violent hailstorm.",
+    "notes": "The Ark of the Covenant seen in heaven. Mary is seen as the Ark of the New Covenant, bearing Jesus."
+  },
+  {
+    "id": "rev12_1",
+    "reference": "Revelation 12:1",
+    "text": "A great sign appeared in the sky, a woman clothed with the sun, with the moon under her feet, and on her head a crown of twelve stars.",
+    "notes": "The Woman Clothed with the Sun, often interpreted as representing both the People of God (Israel/Church) and Mary."
+  },
+  {
+    "id": "rev12_2",
+    "reference": "Revelation 12:2",
+    "text": "She was with child and wailed aloud in pain as she labored to give birth.",
+    "notes": "The Woman's birth pangs, symbolizing the suffering involved in bringing forth Christ and the Church."
+  },
+  {
+    "id": "rev12_5",
+    "reference": "Revelation 12:5",
+    "text": "She gave birth to a son, a male child, destined to rule all the nations with an iron rod. Her child was caught up to God and his throne.",
+    "notes": "Birth of the male child (Jesus, the Messiah) who ascends to God. Connects the Woman to the Mother of Christ."
+  },
+  {
+    "id": "rev12_17",
+    "reference": "Revelation 12:17",
+    "text": "Then the dragon became angry with the woman and went off to wage war against the rest of her offspring, those who keep God’s commandments and bear witness to Jesus.",
+    "notes": "The 'rest of her offspring' are linked to the Woman, interpreted as Christians being children of Mary, Mother of the Church."
+  },
+  {
+    "id": "1kings2_19",
+    "reference": "1 Kings 2:19",
+    "text": "So Bathsheba went to King Solomon to speak to him for Adonijah. The king rose to meet her, bowed to her, and sat on his throne; a throne was set for the king’s mother, and she sat at his right.",
+    "notes": "Typology of the Queen Mother (Gebirah) in the Davidic Kingdom, honored by the King. Seen as prefiguring Mary's role as Queen Mother."
+  },
+  {
+    "id": "prov8_22-23",
+    "reference": "Proverbs 8:22-23",
+    "text": "“The LORD possessed me, the beginning of his ways, the forerunner of his prodigies of long ago; From of old I was poured forth, at the first, before the earth.",
+    "notes": "Personified Wisdom present with God at creation. Some liturgical traditions apply Wisdom texts to Mary (Sedes Sapientiae - Seat of Wisdom)."
+  },
+  {
+    "id": "song4_7",
+    "reference": "Song of Songs 4:7",
+    "text": "You are all beautiful, my beloved, and there is no blemish in you.",
+    "notes": "Applied to Mary, particularly in relation to her Immaculate Conception (being without the blemish of original sin)."
+  },
+  {
+    "id": "judith13_18",
+    "reference": "Judith 13:18",
+    "text": "Then Uzziah said to her: “Blessed are you, daughter, by the Most High God, above all the women on earth; and blessed be the Lord God, the creator of heaven and earth, who guided your blow at the head of the leader of our enemies.",
+    "notes": "Blessing of Judith, seen as a prefigurement of Mary. The language echoes Elizabeth's blessing."
+  },
+  {
+    "id": "judith15_9",
+    "reference": "Judith 15:9",
+    "text": "When he entered her tent, they all cried out with a loud voice: “You are the glory of Jerusalem! You are the great pride of Israel! You are the great boast of our nation!",
+    "notes": "Praise given to Judith after saving her people, applied liturgically to Mary as the glory and honor of the Church."
+  },
+  {
+    "id": "esther5_3",
+    "reference": "Esther 5:3",
+    "text": "The king said to her, “What is it, Queen Esther? What is your request? Even to half the kingdom, it shall be granted you.”",
+    "notes": "Queen Esther intercedes for her people. Seen as typology for Mary's powerful intercession as Queen."
+  },
+  {
+    "id": "exodus40_34-35",
+    "reference": "Exodus 40:34-35",
+    "text": "Then the cloud covered the tent of meeting, and the glory of the LORD filled the tabernacle. Moses could not enter the tent of meeting, because the cloud settled upon it and the glory of the LORD filled the tabernacle.",
+    "notes": "Typology of the Ark/Tabernacle filled with God's glory. Mary, the Ark of the New Covenant, was 'overshadowed' (Luke 1:35) and carried God Incarnate."
+  },
+  {
+    "id": "2sam6_9",
+    "reference": "2 Samuel 6:9",
+    "text": "David was afraid of the LORD that day and said, “How can the ark of the LORD come to me?”",
+    "notes": "David's awe before the Ark of the Covenant. Seen as paralleling Elizabeth's awe: 'How does this happen to me, that the mother of my Lord should come to me?' (Luke 1:43)."
+  },
+  {
+    "id": "psalm27_1",
+    "reference": "Psalm 27:1",
+    "text": "The Lord is my light and my salvation—whom shall I fear? The Lord is the stronghold of my life—of whom shall I be afraid?",
+    "notes": "Finding courage and overcoming fear through God's protection."
+  },
+  {
+    "id": "deut31_6",
+    "reference": "Deuteronomy 31:6",
+    "text": "Be strong and courageous. Do not be afraid or terrified because of them, for the Lord your God goes with you; he will never leave you nor forsake you.",
+    "notes": "Assurance of God's constant presence and strength."
+  },
+  {
+    "id": "isa43_2",
+    "reference": "Isaiah 43:2",
+    "text": "When you pass through the waters, I will be with you; and when you pass through the rivers, they will not sweep over you. When you walk through the fire, you will not be burned; the flames will not set you ablaze.",
+    "notes": "Promise of God's presence and protection through trials."
+  },
+  {
+    "id": "john14_27",
+    "reference": "John 14:27",
+    "text": "Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid.",
+    "notes": "Jesus offers a unique, lasting peace."
+  },
+  {
+    "id": "2cor4_16-18",
+    "reference": "2 Corinthians 4:16-18",
+    "text": "Therefore we do not lose heart. Though outwardly we are wasting away, yet inwardly we are being renewed day by day. For our light and momentary troubles are achieving for us an eternal glory that far outweighs them all. So we fix our eyes not on what is seen, but on what is unseen, since what is seen is temporary, but what is unseen is eternal.",
+    "notes": "Eternal perspective helps endure temporary troubles."
+  },
+  {
+    "id": "rom15_13",
+    "reference": "Romans 15:13",
+    "text": "May the God of hope fill you with all joy and peace as you trust in him, so that you may overflow with hope by the power of the Holy Spirit.",
+    "notes": "A prayer for abundant hope, joy, and peace through faith."
+  },
+  {
+    "id": "psalm34_18",
+    "reference": "Psalm 34:18",
+    "text": "The Lord is close to the brokenhearted and saves those who are crushed in spirit.",
+    "notes": "God's nearness and comfort in times of sorrow."
+  },
+  {
+    "id": "1peter4_10",
+    "reference": "1 Peter 4:10",
+    "text": "Each of you should use whatever gift you have received to serve others, as faithful stewards of God’s grace in its various forms.",
+    "notes": "Inspiration to use our gifts for serving others."
+  },
+  {
+    "id": "prov4_23",
+    "reference": "Proverbs 4:23",
+    "text": "Above all else, guard your heart, for everything you do flows from it.",
+    "notes": "The importance of guarding our inner thoughts and motivations."
+  },
+  {
+    "id": "lam3_22-23",
+    "reference": "Lamentations 3:22-23",
+    "text": "Because of the Lord’s great love we are not consumed, for his compassions never fail. They are new every morning; great is your faithfulness.",
+    "notes": "God's unfailing love and faithfulness, renewed daily."
+  },
+  {
+    "id": "matt7_7",
+    "reference": "Matthew 7:7",
+    "text": "Ask and it will be given to you; seek and you will find; knock and the door will be opened to you.",
+    "notes": "Encouragement to persist in prayer."
+  },
+  {
+    "id": "psalm121_1-2",
+    "reference": "Psalm 121:1-2",
+    "text": "I lift up my eyes to the mountains— where does my help come from? My help comes from the Lord, the Maker of heaven and earth.",
+    "notes": "Looking to God as the ultimate source of help."
+  },
+  {
+    "id": "eph3_20",
+    "reference": "Ephesians 3:20",
+    "text": "Now to him who is able to do immeasurably more than all we ask or imagine, according to his power that is at work within us,",
+    "notes": "God's power exceeds our comprehension and requests."
+  },
+  {
+    "id": "nahum1_7",
+    "reference": "Nahum 1:7",
+    "text": "The Lord is good, a refuge in times of trouble. He cares for those who trust in him,",
+    "notes": "God's goodness and care for those who take refuge in Him."
+  },
+  {
+    "id": "heb10_23",
+    "reference": "Hebrews 10:23",
+    "text": "Let us hold unswervingly to the hope we profess, for he who promised is faithful.",
+    "notes": "Encouragement to remain steadfast in hope because God is faithful."
+  },
+  {
+    "id": "psalm16_8",
+    "reference": "Psalm 16:8",
+    "text": "I keep my eyes always on the Lord. With him at my right hand, I will not be shaken.",
+    "notes": "Finding stability by focusing on God."
+  },
+  {
+    "id": "isa26_3",
+    "reference": "Isaiah 26:3",
+    "text": "You will keep in perfect peace those whose minds are steadfast, because they trust in you.",
+    "notes": "Trusting God leads to perfect peace."
+  },
+  {
+    "id": "1cor15_58",
+    "reference": "1 Corinthians 15:58",
+    "text": "Therefore, my dear brothers and sisters, stand firm. Let nothing move you. Always give yourselves fully to the work of the Lord, because you know that your labor in the Lord is not in vain.",
+    "notes": "Motivation to persevere in serving God."
+  },
+  {
+    "id": "psalm18_2",
+    "reference": "Psalm 18:2",
+    "text": "The Lord is my rock, my fortress and my deliverer; my God is my rock, in whom I take refuge, my shield and the horn of my salvation, my stronghold.",
+    "notes": "Metaphors for God's strength and protection."
+  },
+  {
+    "id": "phil1_6",
+    "reference": "Philippians 1:6",
+    "text": "being confident of this, that he who began a good work in you will carry it on to completion until the day of Christ Jesus.",
+    "notes": "Confidence in God's ongoing work in believers' lives."
+  },
+  {
+    "id": "col3_17",
+    "reference": "Colossians 3:17",
+    "text": "And whatever you do, whether in word or deed, do it all in the name of the Lord Jesus, giving thanks to God the Father through him.",
+    "notes": "Doing everything for God's glory with thankfulness."
+  },
+  {
+    "id": "heb13_5",
+    "reference": "Hebrews 13:5",
+    "text": "...Never will I leave you; never will I forsake you.",
+    "notes": "God's promise of unwavering presence (quoting Deuteronomy)."
+  },
+  {
+    "id": "psalm32_8",
+    "reference": "Psalm 32:8",
+    "text": "I will instruct you and teach you in the way you should go; I will counsel you with my loving eye on you.",
+    "notes": "God's promise of guidance and counsel."
+  },
+  {
+    "id": "rom5_3-5",
+    "reference": "Romans 5:3-5",
+    "text": "Not only so, but we also glory in our sufferings, because we know that suffering produces perseverance; perseverance, character; and character, hope. And hope does not put us to shame, because God’s love has been poured out into our hearts through the Holy Spirit, who has been given to us.",
+    "notes": "Finding purpose and hope even through suffering."
+  },
+  {
+    "id": "james1_2-4",
+    "reference": "James 1:2-4",
+    "text": "Consider it pure joy, my brothers and sisters, whenever you face trials of many kinds, because you know that the testing of your faith produces perseverance. Let perseverance finish its work so that you may be mature and complete, not lacking anything.",
+    "notes": "Trials develop perseverance and maturity."
+  },
+  {
+    "id": "psalm118_24",
+    "reference": "Psalm 118:24",
+    "text": "This is the day the Lord has made; let us rejoice and be glad in it.",
+    "notes": "A call to rejoice in the present day as God's gift."
+  },
+  {
+    "id": "1john4_4",
+    "reference": "1 John 4:4",
+    "text": "You, dear children, are from God and have overcome them, because the one who is in you is greater than the one who is in the world.",
+    "notes": "Assurance of victory through Christ within us."
+  },
+  {
+    "id": "psalm91_1-2",
+    "reference": "Psalm 91:1-2",
+    "text": "Whoever dwells in the shelter of the Most High will rest in the shadow of the Almighty. I will say of the Lord, “He is my refuge and my fortress, my God, in whom I trust.”",
+    "notes": "Finding rest and security by trusting in God's protection."
+  },
+  {
+    "id": "prov18_10",
+    "reference": "Proverbs 18:10",
+    "text": "The name of the Lord is a fortified tower; the righteous run to it and are safe.",
+    "notes": "Finding safety and refuge in God's character."
+  },
+  {
+    "id": "matt6_26",
+    "reference": "Matthew 6:26",
+    "text": "Look at the birds of the air; they do not sow or reap or store away in barns, and yet your heavenly Father feeds them. Are you not much more valuable than they?",
+    "notes": "God's provision and care, reducing worry."
+  },
+  {
+    "id": "psalm138_8",
+    "reference": "Psalm 138:8",
+    "text": "The Lord will vindicate me; your love, Lord, endures forever— do not abandon the works of your hands.",
+    "notes": "Confidence in God's purpose and enduring love."
+  },
+  {
+    "id": "zeph3_17",
+    "reference": "Zephaniah 3:17",
+    "text": "The Lord your God is with you, the Mighty Warrior who saves. He will take great delight in you; in his love he will no longer rebuke you, but will rejoice over you with singing.",
+    "notes": "God's presence, power, delight, and love expressed."
+  },
+  {
+    "id": "psalm62_5-6",
+    "reference": "Psalm 62:5-6",
+    "text": "Yes, my soul, find rest in God; my hope comes from him. Truly he is my rock and my salvation; he is my fortress, I will not be shaken.",
+    "notes": "Finding rest and unshakable hope in God alone."
+  },
+  {
+    "id": "gal6_9",
+    "reference": "Galatians 6:9",
+    "text": "Let us not become weary in doing good, for at the proper time we will reap a harvest if we do not give up.",
+    "notes": "Encouragement to persist in doing good."
+  },
+  {
+    "id": "1chron16_11",
+    "reference": "1 Chronicles 16:11",
+    "text": "Look to the Lord and his strength; seek his face always.",
+    "notes": "A call to continually seek God's presence and power."
+  },
+  {
+    "id": "psalm147_3",
+    "reference": "Psalm 147:3",
+    "text": "He heals the brokenhearted and binds up their wounds.",
+    "notes": "God's comfort and healing for emotional pain."
+  },
+  {
+    "id": "isa54_10",
+    "reference": "Isaiah 54:10",
+    "text": "Though the mountains be shaken and the hills be removed, yet my unfailing love for you will not be shaken nor my covenant of peace be removed,” says the Lord, who has compassion on you.",
+    "notes": "God's love and peace are more steadfast than mountains."
+  },
+  {
+    "id": "eph2_10",
+    "reference": "Ephesians 2:10",
+    "text": "For we are God’s handiwork, created in Christ Jesus to do good works, which God prepared in advance for us to do.",
+    "notes": "Our identity and purpose as God's creation for good works."
+  },
+  {
+    "id": "psalm46_1",
+    "reference": "Psalm 46:1",
+    "text": "God is our refuge and strength, an ever-present help in trouble.",
+    "notes": "God is a constant source of help and security."
+  },
+  {
+    "id": "2thess3_3",
+    "reference": "2 Thessalonians 3:3",
+    "text": "But the Lord is faithful, and he will strengthen you and protect you from the evil one.",
+    "notes": "Assurance of God's faithfulness, strength, and protection."
+  },
+  {
+    "id": "john15_5",
+    "reference": "John 15:5",
+    "text": "I am the vine; you are the branches. If you remain in me and I in you, you will bear much fruit; apart from me you can do nothing.",
+    "notes": "The necessity of abiding in Christ for spiritual fruitfulness."
+  },
+  {
+    "id": "psalm55_22",
+    "reference": "Psalm 55:22",
+    "text": "Cast your cares on the Lord and he will sustain you; he will never let the righteous be shaken.",
+    "notes": "Invitation to give our burdens to God for His support."
+  },
+  {
+    "id": "heb6_19",
+    "reference": "Hebrews 6:19",
+    "text": "We have this hope as an anchor for the soul, firm and secure.",
+    "notes": "Christian hope provides stability for the soul."
+  },
+  {
+    "id": "isa58_11",
+    "reference": "Isaiah 58:11",
+    "text": "The Lord will guide you always; he will satisfy your needs in a sun-scorched land and will strengthen your frame. You will be like a well-watered garden, like a spring whose waters never fail.",
+    "notes": "Promise of God's continuous guidance, provision, and renewal."
+  },
+  {
+    "id": "psalm31_24",
+    "reference": "Psalm 31:24",
+    "text": "Be strong and take heart, all you who hope in the Lord.",
+    "notes": "A direct encouragement to those who place their hope in God."
+  },
+  {
+    "id": "phil4_6-7",
+    "reference": "Philippians 4:6-7",
+    "text": "Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus.",
+    "notes": "Instruction on prayer instead of anxiety, leading to God's peace."
+  },
+  {
+    "id": "rom8_31",
+    "reference": "Romans 8:31",
+    "text": "What, then, shall we say in response to these things? If God is for us, who can be against us?",
+    "notes": "Ultimate confidence derived from God being on our side."
+  },
+  {
+    "id": "rom8_38-39",
+    "reference": "Romans 8:38-39",
+    "text": "For I am convinced that neither death nor life, neither angels nor demons, neither the present nor the future, nor any powers, neither height nor depth, nor anything else in all creation, will be able to separate us from the love of God that is in Christ Jesus our Lord.",
+    "notes": "Absolute assurance of the inseparable nature of God's love."
+  },
+  {
+    "id": "1cor16_13-14",
+    "reference": "1 Corinthians 16:13-14",
+    "text": "Be on your guard; stand firm in the faith; be courageous; be strong. Do everything in love.",
+    "notes": "Commands for spiritual alertness, steadfastness, courage, strength, and love."
+  },
+  {
+    "id": "jude1_24-25",
+    "reference": "Jude 1:24-25",
+    "text": "To him who is able to keep you from stumbling and to present you before his glorious presence without fault and with great joy— to the only God our Savior be glory, majesty, power and authority, through Jesus Christ our Lord, before all ages, now and forevermore! Amen.",
+    "notes": "A doxology praising God's ability to preserve believers and bring them joyfully into His presence."
+  }
+]
