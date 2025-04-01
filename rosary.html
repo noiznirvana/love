@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title> <!-- TODO: Allow title editing? -->
+    <style>
+
+        /* Basic Reset */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Theme Variables */
+        :root {
+            --bg-primary: #f8f9fa;
+            --text-primary: #212529;
+            --bg-secondary: #ffffff;
+            --border-color: #dee2e6;
+            --accent-primary: #0d6efd;
+            --accent-secondary: #6c757d;
+            --nav-bg: #e9ecef;
+            --nav-text: #495057;
+            --nav-hover-bg: #ced4da;
+            --quote-bg: #eef; /* Light blueish */
+            --quote-border: #cce;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --scroll-thumb: #adb5bd;
+            --scroll-track: var(--nav-bg);
+
+            /* Mystery Specific Accents (Light Theme) */
+            --joyful-accent: #f4a261; /* Orange-Yellow */
+            --sorrowful-accent: #e76f51; /* Reddish-Orange */
+            --glorious-accent: #2a9d8f; /* Teal */
+            --luminous-accent: #e9c46a; /* Yellow */
+        }
+
+        body.dark-theme {
+            --bg-primary: #1a1a1a; /* Darker gray */
+            --text-primary: #f8f9fa;
+            --bg-secondary: #2c2c2c; /* Slightly lighter dark gray */
+            --border-color: #495057;
+            --accent-primary: #4dabf7; /* Lighter blue */
+            --accent-secondary: #adb5bd;
+            --nav-bg: #343a40;
+            --nav-text: #e9ecef;
+            --nav-hover-bg: #495057;
+            --quote-bg: #2a2a3a; /* Dark blueish */
+            --quote-border: #404060;
+            --shadow-color: rgba(255, 255, 255, 0.1);
+            --scroll-thumb: #6c757d;
+            --scroll-track: var(--nav-bg);
+
+             /* Mystery Specific Accents (Dark Theme) */
+            --joyful-accent: #f8b37a;
+            --sorrowful-accent: #ec856b;
+            --glorious-accent: #4fc0b3;
+            --luminous-accent: #f0d086;
+        }
+
+        /* General Styles */
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px; /* Base font size */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--scroll-track);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--scroll-thumb);
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-secondary);
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: var(--nav-bg);
+            padding: 0.8rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--accent-primary);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 1rem; /* Spacing between links */
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--nav-text);
+            font-weight: 500;
+            padding: 0.5rem 0.8rem;
+            border-radius: 5px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: var(--nav-hover-bg);
+            color: var(--text-primary); /* Use primary text color on hover background */
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            background-color: var(--accent-secondary);
+            color: var(--bg-primary); /* Contrast with button background */
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px; /* Pill shape */
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-left: 1rem; /* Space it from nav links */
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--accent-primary);
+            transform: scale(1.05);
+        }
+
+        /* Main Content Area */
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+        }
+
+        /* Mystery Section Styling */
+        .mystery-section {
+            background-color: var(--bg-secondary);
+            margin-bottom: 2.5rem;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            border-left: 7px solid; /* Will be set per section */
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, border-left-color 0.3s ease;
+        }
+
+        .mystery-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-primary); /* Use primary accent for titles */
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+            display: inline-block; /* Make border only as wide as text */
+        }
+
+        /* Apply specific accent colors */
+        #joyful { border-left-color: var(--joyful-accent); }
+        #joyful h2 { color: var(--joyful-accent); }
+
+        #sorrowful { border-left-color: var(--sorrowful-accent); }
+        #sorrowful h2 { color: var(--sorrowful-accent); }
+
+        #glorious { border-left-color: var(--glorious-accent); }
+        #glorious h2 { color: var(--glorious-accent); }
+
+        #luminous { border-left-color: var(--luminous-accent); }
+        #luminous h2 { color: var(--luminous-accent); }
+
+        /* Decade List */
+        .decade-list {
+            list-style: none; /* Remove default bullet points */
+            padding-left: 0;
+        }
+
+        .decade-item {
+            margin-bottom: 1.8rem;
+            padding-bottom: 1.8rem;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .decade-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .decade-item strong {
+            display: block;
+            font-size: 1.25rem;
+            color: var(--accent-secondary); /* Subtler color for decade title */
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        /* Bible Verse Quote Styling */
+        .bible-quote {
+            background-color: var(--quote-bg);
+            border-left: 5px solid var(--quote-border);
+            margin: 0.8rem 0 0 1rem; /* Indent slightly */
+            padding: 0.8rem 1.2rem;
+            border-radius: 0 8px 8px 0; /* Rounded corners on right side */
+            font-style: italic;
+            transition: background-color 0.3s ease, border-left-color 0.3s ease;
+        }
+
+        .bible-quote p {
+            margin-bottom: 0.3rem;
+        }
+
+        .bible-quote cite {
+            display: block;
+            text-align: right;
+            font-style: normal;
+            font-size: 0.9em;
+            color: var(--accent-secondary);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1rem;
+            }
+            .nav-links {
+                margin-top: 0.8rem;
+                flex-wrap: wrap; /* Allow links to wrap */
+                gap: 0.5rem; /* Reduce gap */
+                justify-content: center; /* Center links when wrapped */
+                width: 100%;
+            }
+             .nav-links a {
+                padding: 0.4rem 0.6rem;
+             }
+            .theme-toggle {
+                margin-top: 0.8rem;
+                align-self: flex-end; /* Move button to the right */
+            }
+            .container {
+                padding: 1rem;
+                margin: 1rem auto;
+            }
+            .mystery-section {
+                padding: 1.5rem;
+            }
+            .mystery-section h2 {
+                font-size: 1.7rem;
+            }
+            .decade-item strong {
+                font-size: 1.15rem;
+            }
+        }
+
+    
+    </style>
+</head>
+<body>
+
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-title">Rosary Guide</div>
+        <ul class="nav-links">
+            <li><a href="#joyful">Joyful</a></li>
+            <li><a href="#sorrowful">Sorrowful</a></li>
+            <li><a href="#glorious">Glorious</a></li>
+            <li><a href="#luminous">Luminous</a></li>
+        </ul>
+        <button class="theme-toggle" id="theme-toggle-btn">Toggle Theme</button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+
+        <!-- Joyful Mysteries -->
+        <section id="joyful" class="mystery-section">
+            <h2>The Joyful Mysteries</h2>
+            <p>(Prayed on Mondays, Saturdays, and Sundays of Advent)</p>
+            <ol class="decade-list">
+                <li class="decade-item">
+                    <strong>1st Decade: The Annunciation</strong>
+                    <blockquote class="bible-quote">
+                        <p>"And the angel said to her in reply, 'The holy Spirit will come upon you, and the power of the Most High will overshadow you. Therefore the child to be born will be called holy, the Son of God.'"</p>
+                        <cite>Luke 1:35</cite>
+                    </blockquote>
+                </li>
+                <li class="decade-item">
+                    <strong>2nd Decade: The Visitation</strong>
+                    <blockquote class="bible-quote">
+                        <p>"When Elizabeth heard Mary’s greeting, the infant leaped in her womb, and Elizabeth, filled with the holy Spirit, cried out in a loud voice and said, 'Most blessed are you among women, and blessed is the fruit of your womb.'"</p>
+                        <cite>Luke 1:41-42</cite>
+                    </blockquote>
+                </li>
+                <li class="decade-item">
+                    <strong>3rd Decade: The Nativity of Jesus</strong>
+                    <blockquote class="bible-quote">
+                        <p>"And she gave birth to her firstborn son. She wrapped him in swaddling clothes and laid him in a manger, because there was no room for them in the inn."</p>
+                        <cite>Luke 2:7</cite>
+                    </blockquote>
+                </li>
+                <li class="decade-item">
+                    <strong>4th Decade: The Presentation in the Temple</strong>
+                    <blockquote class="bible-quote">
+                        <p>"Now, Master, you may let your servant go in peace, according to your word, for my eyes have seen your salvation, which you prepared in sight of all the peoples..."</p>
+                        <cite>Luke 2:29-31</cite>
+                    </blockquote>
+                </li>
+                <li class="decade-item">
+                    <strong>5th Decade: The Finding of Jesus in the Temple</strong>
+                    <blockquote class="bible-quote">
+                        <p>"He said to them, 'Why were you looking for me? Did you not know that I must be in my Father’s house?'"</p>
+                        <cite>Luke 2:49</cite>
+                    </blockquote>
+                </li>
+            </ol>
+        </section>
+
+        <!-- Sorrowful Mysteries -->
+        <section id="sorrowful" class="mystery-section">
+            <h2>The Sorrowful Mysteries</h2>
+            <p>(Prayed on Tuesdays, Fridays, and Sundays of Lent)</p>
+             <ol class="decade-list">
+                <li class="decade-item">
+                    <strong>1st Decade: The Agony in the Garden</strong>
+                    <blockquote class="bible-quote">
+                        <p>"He advanced a little and fell prostrate in prayer, saying, 'My Father, if it is possible, let this cup pass from me; yet, not as I will, but as you will.'"</p>
+                        <cite>Matthew 26:39</cite>
+                    </blockquote>
+                </li>
+                <li class="decade-item">
+                    <strong>2nd Decade: The Scourging at the Pillar</strong>
+                    <blockquote class="bible-quote">
+                        <p>"Then Pilate took Jesus and had him scourged."</p>
+                        <cite>John 19:1</cite>
+                    </blockquote>
+                </li>
+                <li class="decade-item">
+                    <strong>3rd Decade: The Crowning with Thorns</strong>
+                    <blockquote class="bible-quote">
+                        <p>"And the soldiers wove a crown out of thorns and placed it on his head, and clothed him in a purple cloak..."</p>
+                        <cite>John 19:2</cite>
+                    </blockquote>
+                </li>
+                <li class="decade-item">
+                    <strong>4th Decade: The Carrying of the Cross</strong>
+                    <blockquote class="bible-quote">
+                        <p>"And carrying the cross himself, he went out to what is called the Place of the Skull, in Hebrew, Golgotha."</p>
+                        <cite>John 19:17</cite>
+                    </blockquote>
+                </li>
+                <li class="decade-item">
+                    <strong>5th Decade: The Crucifixion and Death of Jesus</strong>
+                    <blockquote class="bible-quote">
+                        <p>"Jesus cried out in a loud voice, 'Father, into your hands I commend my spirit'; and when he had said this he breathed his last."</p>
+                        <cite>Luke 23:46</cite>
+                    </blockquote>
+                </li>
+            </ol>
+        </section>
+
+        <!-- Glorious Mysteries -->
+        <section id="glorious" class="mystery-section">
+            <h2>The Glorious Mysteries</h2>
+            <p>(Prayed on Wednesdays and Sundays outside of Lent and Advent)</p>
+             <ol class="decade-list">
+                <li class="decade-item">
+                    <strong>1st Decade: The Resurrection</strong>
+                    <blockquote class="bible-quote">
+                        <p>"He is not here; for he has been raised, as he said. Come, see the place where he lay."</p>
+                        <cite>Matthew 28:6</cite>
+                    </blockquote>
+                </li>
+                <li class="decade-item">
+                    <strong>2nd Decade: The Ascension</strong>
+                    <blockquote class="bible-quote">
+                        <p>"So then the Lord Jesus, after he spoke to them, was taken up into heaven and took his seat at the right hand of God."</p>
+                        <cite>Mark 16:19</cite>
+                    </blockquote>
+                </li>
+                <li class="decade-item">
+                    <strong>3rd Decade: The Descent of the Holy Spirit</strong>
+                    <blockquote class="bible-quote">
+                        <p>"And they were all filled with the holy Spirit and began to speak in different tongues, as the Spirit enabled them to proclaim."</p>
+                        <cite>Acts 2:4</cite>
+                    </blockquote>
+                </li>
+                <li class="decade-item">
+                    <strong>4th Decade: The Assumption of Mary</strong>
+                    <blockquote class="bible-quote">
+                        <p>"For he has looked upon his handmaid’s lowliness; behold, from now on will all ages call me blessed." (Related verse reflecting her exaltation)</p>
+                        <cite>Luke 1:48</cite>
+                    </blockquote>
+                </li>
+                <li class="decade-item">
+                    <strong>5th Decade: The Coronation of Mary</strong>
+                    <blockquote class="bible-quote">
+                        <p>"A great sign appeared in the sky, a woman clothed with the sun, with the moon under her feet, and on her head a crown of twelve stars."</p>
+                        <cite>Revelation 12:1</cite>
+                    </blockquote>
+                </li>
+            </ol>
+        </section>
+
+        <!-- Luminous Mysteries -->
+        <section id="luminous" class="mystery-section">
+            <h2>The Luminous Mysteries (Mysteries of Light)</h2>
+            <p>(Prayed on Thursdays)</p>
+             <ol class="decade-list">
+                <li class="decade-item">
+                    <strong>1st Decade: The Baptism of Jesus in the Jordan</strong>
+                    <blockquote class="bible-quote">
+                        <p>"And a voice came from the heavens, saying, 'This is my beloved Son, with whom I am well pleased.'"</p>
+                        <cite>Matthew 3:17</cite>
+                    </blockquote>
+                </li>
+                <li class="decade-item">
+                    <strong>2nd Decade: The Wedding at Cana</strong>
+                    <blockquote class="bible-quote">
+                        <p>"His mother said to the servers, 'Do whatever he tells you.'"</p>
+                        <cite>John 2:5</cite>
+                    </blockquote>
+                </li>
+                <li class="decade-item">
+                    <strong>3rd Decade: The Proclamation of the Kingdom of God</strong>
+                    <blockquote class="bible-quote">
+                        <p>"'This is the time of fulfillment. The kingdom of God is at hand. Repent, and believe in the gospel.'"</p>
+                        <cite>Mark 1:15</cite>
+                    </blockquote>
+                </li>
+                <li class="decade-item">
+                    <strong>4th Decade: The Transfiguration</strong>
+                    <blockquote class="bible-quote">
+                        <p>"While he was still speaking, behold, a bright cloud cast a shadow over them, then from the cloud came a voice that said, 'This is my beloved Son, with whom I am well pleased; listen to him.'"</p>
+                        <cite>Matthew 17:5</cite>
+                    </blockquote>
+                </li>
+                <li class="decade-item">
+                    <strong>5th Decade: The Institution of the Eucharist</strong>
+                    <blockquote class="bible-quote">
+                        <p>"While they were eating, Jesus took bread, said the blessing, broke it, and giving it to his disciples said, 'Take and eat; this is my body.'"</p>
+                        <cite>Matthew 26:26</cite></blockquote></li>
+            </ol><div>&nbsp;(<b>noiz and may</b> <i>march2025</i>)<i></i></div>
+        </section>
+
+    </main>
+
+    
+
+
+
+
+<script>
+
+        const themeToggleBtn = document.getElementById('theme-toggle-btn');
+        const body = document.body;
+        const currentTheme = localStorage.getItem('theme');
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+        // Function to apply theme
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-theme');
+                themeToggleBtn.textContent = 'Light Mode';
+            } else {
+                body.classList.remove('dark-theme');
+                themeToggleBtn.textContent = 'Dark Mode';
+            }
+        }
+
+        // Set initial theme based on preference or system settings
+        let initialTheme = 'light'; // Default
+        if (currentTheme) {
+            initialTheme = currentTheme;
+        } else if (prefersDarkScheme.matches) {
+            initialTheme = 'dark';
+        }
+        applyTheme(initialTheme);
+
+
+        // Button click listener
+        themeToggleBtn.addEventListener('click', () => {
+            let newTheme;
+            if (body.classList.contains('dark-theme')) {
+                newTheme = 'light';
+            } else {
+                newTheme = 'dark';
+            }
+            applyTheme(newTheme);
+            localStorage.setItem('theme', newTheme); // Save preference
+        });
+
+        // Optional: Listen for system theme changes
+        prefersDarkScheme.addEventListener('change', (e) => {
+            // Only apply if no explicit preference is stored
+            if (!localStorage.getItem('theme')) {
+                applyTheme(e.matches ? 'dark' : 'light');
+            }
+        });
+
+         // Optional: Highlight active nav link based on scroll position
+         const sections = document.querySelectorAll('.mystery-section');
+         const navLinks = document.querySelectorAll('.nav-links a');
+
+         window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                // Adjust offset if needed based on navbar height
+                const sectionHeight = section.clientHeight;
+                 if (pageYOffset >= (sectionTop - 100)) { // 100px offset for navbar height + buffer
+                     current = section.getAttribute('id');
+                 }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+         });
+
+    
+</script>
+</body>
+</html>
