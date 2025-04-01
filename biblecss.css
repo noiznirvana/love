@@ -1,0 +1,590 @@
+/* =================================
+   Base Styles & Resets
+   ================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* =================================
+   Theme Variables
+   ================================= */
+:root {
+    /* Light Theme (Default) */
+    --bg-primary-color: rgba(240, 244, 248, 0.85); /* Slightly transparent for bg image */
+    --bg-secondary-color: rgba(255, 255, 255, 0.9); /* Slightly transparent */
+    --text-primary: #333;
+    --text-secondary: #555;
+    --accent-primary: #4a90e2;    /* Primary blue */
+    --accent-secondary: #7bb8f9; /* Lighter blue / highlight */
+    --border-color: #d1d9e6;
+    --shadow-color: rgba(0, 0, 0, 0.15); /* Slightly darker shadow */
+    --gradient-start: rgba(230, 240, 255, 0.95); /* More opaque gradient */
+    --gradient-end: rgba(255, 255, 255, 0.95);
+    --button-bg: var(--accent-primary);
+    --button-text: #ffffff;
+    --button-hover-bg: #3a7ac8; /* Darker shade for hover */
+    --icon-color: var(--text-primary);
+    --input-bg: #fff;
+    --input-border: #ccc;
+    --modal-overlay: rgba(0, 0, 0, 0.6);
+    --body-bg-image: url('background.jpg'); /* *** REPLACE THIS FILENAME *** */
+}
+
+[data-theme="dark"] {
+    /* Dark Theme */
+    --bg-primary-color: rgba(26, 26, 46, 0.85);     /* Dark blue/purple bg */
+    --bg-secondary-color: rgba(22, 33, 62, 0.9);    /* Slightly lighter card bg */
+    --text-primary: #e0e0fc;    /* Light text */
+    --text-secondary: #a0a0cc;   /* Dimmer text */
+    --accent-primary: #5372f0;    /* Brighter blue accent */
+    --accent-secondary: #90a4ff; /* Lighter highlight blue */
+    --border-color: #0f3460;     /* Darker border */
+    --shadow-color: rgba(0, 0, 0, 0.5); /* Darker shadow */
+    --gradient-start: rgba(22, 33, 62, 0.95);
+    --gradient-end: rgba(26, 26, 46, 0.95);
+    --button-bg: var(--accent-primary);
+    --button-text: #e0e0fc;
+    --button-hover-bg: #6a82f5; /* Lighter shade for hover */
+    --icon-color: var(--text-primary);
+    --input-bg: #1f2a40;
+    --input-border: #0f3460;
+    --modal-overlay: rgba(0, 0, 0, 0.7);
+    /* Consider a different or darker bg image for dark mode if needed */
+    /* --body-bg-image: url('YOUR_DARK_BACKGROUND_IMAGE.jpg'); */
+}
+
+/* =================================
+   General Styles & Background Image
+   ================================= */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-primary-color); /* Fallback color */
+    color: var(--text-primary);
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+
+    /* --- Background Image --- */
+    background-image: var(--body-bg-image);
+    background-size: cover; /* Cover the entire viewport */
+    background-position: center center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-attachment: fixed; /* Make background stay fixed during scroll */
+    min-height: 100vh; /* Ensure body takes at least full viewport height */
+}
+
+/* Apply background color overlay to blend */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--bg-primary-color);
+    z-index: -1; /* Place it behind the content, but above the image */
+}
+
+
+/* =================================
+   Header & Controls (Sticky Navigation)
+   ================================= */
+.controls {
+    padding: 0.8rem 1.5rem; /* Slightly less vertical padding */
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 3px 8px var(--shadow-color); /* More pronounced shadow */
+
+    /* --- Sticky Navigation --- */
+    position: sticky;
+    top: 0; /* Stick to the top */
+    z-index: 1000; /* Ensure it's above other content */
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.8rem;
+    width: 100%; /* Ensure it spans width for sticky */
+}
+
+/* --- Keep other .controls, .title-area, .actions-area, .button-group, button styles --- */
+/* (Copied from previous full CSS for completeness) */
+.title-area {
+    text-align: center;
+}
+
+h1 {
+    color: var(--accent-primary);
+    font-weight: 400;
+    letter-spacing: 1px;
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.actions-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    width: 100%;
+}
+
+.controls .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+}
+
+.controls button {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.85rem;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+}
+
+.controls button:hover {
+    background-color: var(--button-hover-bg);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.controls button:active {
+     transform: translateY(0px);
+     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.controls button i {
+    font-size: 1em;
+    vertical-align: middle;
+}
+
+#theme-toggle i {
+    color: var(--icon-color);
+}
+
+.view-toggle {
+    opacity: 0.7;
+    border: 1px solid transparent;
+    background-color: var(--bg-secondary-color); /* Use var */
+    color: var(--text-secondary);
+}
+
+.view-toggle:hover {
+     opacity: 0.9;
+}
+
+.view-toggle.active {
+    opacity: 1;
+    background-color: var(--accent-secondary);
+    color: var(--button-text);
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+    border-color: var(--accent-primary);
+}
+.view-toggle.active:hover {
+     background-color: var(--accent-secondary);
+     transform: translateY(0);
+     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+
+/* =================================
+   Main Content Area
+   ================================= */
+main#verse-list-container {
+    padding: 1.5rem;
+    max-width: 1200px;
+    margin: 1.5rem auto; /* Auto margins for centering */
+    transition: all 0.3s ease-in-out;
+    /* No extra padding needed for sticky header usually, */
+    /* but add if content gets hidden: */
+    /* padding-top: 10px; */
+}
+
+/* List View Specific */
+#verse-list-container.view-list {
+    display: grid;
+    gap: 1.2rem;
+    max-width: 900px;
+}
+
+/* Tile View Specific */
+#verse-list-container.view-tile {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+
+/* =================================
+   Verse Item Styling (Common)
+   ================================= */
+.verse-item {
+    background-color: var(--bg-secondary-color); /* Use var */
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    box-shadow: 3px 3px 8px var(--shadow-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.verse-item::before { /* Gradient Accent */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+.verse-item:hover::before {
+     opacity: 1;
+}
+
+.verse-ref {
+    font-weight: bold;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+}
+
+.verse-text {
+    margin-bottom: 0.8rem;
+    font-style: italic;
+    color: var(--text-primary);
+    flex-grow: 1;
+}
+
+.verse-notes {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    border-left: 3px solid var(--accent-secondary);
+    padding: 0.5rem 0.8rem;
+    margin-top: 0.8rem;
+    background-color: rgba(128, 128, 128, 0.05);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 150px;
+    overflow-y: auto;
+    border-radius: 0 4px 4px 0; /* Slight rounding */
+}
+
+.verse-actions {
+    margin-top: 1rem;
+    text-align: right;
+    padding-top: 0.8rem;
+    border-top: 1px dashed var(--border-color);
+}
+
+.verse-actions button {
+    background: none;
+    border: 1px solid var(--accent-primary);
+    color: var(--accent-primary);
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    margin-left: 0.5rem;
+    z-index: 5;
+    position: relative;
+}
+.verse-actions button:hover {
+    background-color: var(--accent-primary);
+    color: var(--button-text);
+}
+
+
+/* =================================
+   View Specific Item Styling
+   ================================= */
+#verse-list-container.view-list .verse-item {
+    padding: 1.2rem 1.5rem;
+}
+#verse-list-container.view-list .verse-ref {
+    font-size: 1.1em;
+}
+
+#verse-list-container.view-tile .verse-item {
+    padding: 1rem;
+    height: 100%;
+}
+
+#verse-list-container.view-tile .verse-ref {
+    font-size: 1em;
+}
+#verse-list-container.view-tile .verse-text {
+    font-size: 0.95em;
+    margin-bottom: 0.5rem;
+}
+#verse-list-container.view-tile .verse-notes {
+    font-size: 0.85em;
+    max-height: 100px;
+}
+
+#verse-list-container.view-tile .verse-item:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 6px 6px 15px var(--shadow-color);
+    z-index: 10;
+}
+
+
+/* =================================
+   Editing Styles
+   ================================= */
+.verse-item.editing {
+    border-color: var(--accent-secondary);
+    box-shadow: 0 0 10px var(--accent-secondary);
+}
+.verse-item.editing::before {
+    background: linear-gradient(180deg, var(--accent-secondary), var(--accent-primary));
+}
+
+.edit-input,
+.edit-textarea {
+    display: block;
+    width: 100%;
+    padding: 0.6rem;
+    margin-bottom: 0.8rem;
+    border: 1px solid var(--input-border);
+    background-color: var(--input-bg);
+    color: var(--text-primary);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 1em;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.edit-input:focus,
+.edit-textarea:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 5px var(--accent-primary);
+    outline: none;
+}
+
+.edit-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.verse-item.editing label {
+    display: block;
+    font-size: 0.8em;
+    color: var(--text-secondary);
+    margin-bottom: 0.2rem;
+    font-weight: bold;
+}
+
+
+/* =================================
+   Random Verse Modal
+   ================================= */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: var(--modal-overlay);
+    backdrop-filter: blur(5px);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.modal.visible {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: var(--bg-secondary-color); /* Use var */
+    color: var(--text-primary);
+    margin: auto;
+    padding: 25px 30px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    position: relative;
+    transform: scale(0.9) translateY(10px);
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    opacity: 0;
+}
+
+.modal.visible .modal-content {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.modal-close-btn {
+    color: var(--text-secondary);
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    border: none;
+    background: none;
+    cursor: pointer;
+    line-height: 1;
+    padding: 5px;
+}
+
+.modal-close-btn:hover,
+.modal-close-btn:focus {
+    color: var(--accent-primary);
+    text-decoration: none;
+}
+
+.modal h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: var(--accent-secondary);
+    text-align: center;
+    font-weight: 300;
+}
+
+#random-verse-display .verse-ref {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: var(--accent-primary);
+    text-align: center;
+}
+
+#random-verse-display .verse-text {
+    font-size: 1.1em;
+    margin-top: 1.2rem;
+    margin-bottom: 1.2rem;
+    font-style: italic;
+    text-align: center;
+    line-height: 1.7;
+}
+
+#random-verse-display .verse-notes {
+    font-size: 1em;
+    color: var(--text-secondary);
+    margin-top: 1.5rem;
+    border-left: 3px solid var(--accent-secondary);
+    padding: 10px 15px;
+    background-color: var(--bg-primary-color); /* Use var */
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#show-another-random {
+    display: block;
+    margin: 1.5rem auto 0;
+    padding: 0.7rem 1.8rem;
+    font-size: 1rem;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+#show-another-random:hover {
+     background-color: var(--button-hover-bg);
+     transform: scale(1.05);
+}
+#show-another-random:active {
+    transform: scale(1);
+}
+
+/* =================================
+   Footer (Static)
+   ================================= */
+footer {
+    text-align: center;
+    padding: 1rem;
+    margin-top: 3rem; /* More margin above footer */
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    background-color: var(--bg-secondary-color); /* Use var */
+    border-top: 1px solid var(--border-color);
+    /* Removed position: fixed */
+    width: 100%;
+}
+
+
+/* =================================
+   Responsiveness
+   ================================= */
+@media (min-width: 768px) {
+    .controls {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem 2rem; /* More horizontal padding */
+    }
+     .title-area {
+        text-align: left;
+        flex-shrink: 0;
+        margin-right: 1rem;
+    }
+    h1 {
+        margin-bottom: 0;
+        font-size: 1.8rem;
+    }
+    .actions-area {
+        flex-direction: row;
+        justify-content: flex-end;
+        flex-grow: 1;
+        align-items: center;
+    }
+    .controls .button-group {
+         justify-content: flex-start;
+    }
+
+    main#verse-list-container {
+        padding: 2rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .actions-area {
+        gap: 1.5rem;
+    }
+     #verse-list-container.view-tile {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+}
+
+/* Accessibility & Hidden Inputs */
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px var(--accent-secondary);
+}
+
+input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}

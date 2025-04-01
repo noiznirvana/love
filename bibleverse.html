@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Verse Companion V2</title>
+    <!-- Link to the new CSS file -->
+    <link rel="stylesheet" href="biblecss.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- Header is now sticky via CSS -->
+    <header class="controls">
+        <div class="title-area">
+             <h1>Bible Verse Companion</h1>
+        </div>
+        <div class="actions-area">
+            <div class="button-group file-ops">
+                <button id="open-button" title="Open JSON File (Replaces List)">
+                    <i class="fas fa-folder-open"></i> Open
+                </button>
+                <input type="file" id="open-file-input" accept=".json" style="display: none;">
+
+                <button id="merge-button" title="Merge JSON File (Adds to List)">
+                    <i class="fas fa-layer-group"></i> Merge
+                </button>
+                <input type="file" id="merge-file-input" accept=".json" style="display: none;">
+
+                <button id="save-button" title="Save Current Verses to JSON File">
+                    <i class="fas fa-save"></i> Save JSON
+                </button>
+                 <button id="reset-data-button" title="Clear Saved Data & Reload Default (verses.json)">
+                    <i class="fas fa-undo"></i> Reset
+                </button>
+            </div>
+             <div class="button-group view-ops">
+                 <button id="add-verse-button" title="Add New Verse">
+                     <i class="fas fa-plus"></i> Add
+                </button>
+                 <button id="random-verse-button" title="Show a Random Verse">
+                    <i class="fas fa-random"></i> Random
+                 </button>
+                <button id="view-list-button" class="view-toggle active" title="List View">
+                    <i class="fas fa-list"></i> List
+                </button>
+                <button id="view-tile-button" class="view-toggle" title="Tile View">
+                    <i class="fas fa-th-large"></i> Tile
+                </button>
+                 <button id="theme-toggle" title="Toggle Theme">
+                    <i class="fas fa-sun"></i> <!-- Icon changes in JS -->
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main content area -->
+    <main id="verse-list-container" class="view-list">
+        <!-- Verses will be loaded here -->
+    </main>
+
+    <!-- Random Verse Modal (Structure remains the same) -->
+    <div id="random-verse-modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" title="Close">&times;</button>
+            <h2>Random Verse</h2>
+            <div id="random-verse-display">
+                <p class="verse-ref">Reference</p>
+                <p class="verse-text">Text</p>
+                <p class="verse-notes">Notes</p>
+            </div>
+            <button id="show-another-random">Show Another</button>
+        </div>
+    </div>
+
+    <!-- Footer is now static relative to body, not fixed -->
+    <footer>
+        <p>Bible Verse Companion | Data persists in local storage.</p>
+    </footer>
+
+    <!-- Link to the new JS file -->
+    <script src="biblescript.js"></script>
+</body>
+</html>
