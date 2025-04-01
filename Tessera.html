@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Essential for mobile -->
+    <title>Legion of Mary Tessera</title>
+    <style>
+        /* Basic Reset & Font */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px; /* Base font size for rem units */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            /* Light Theme Defaults */
+            background-color: #f4f4f4;
+            color: #333;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* Dark Theme */
+        body.dark-theme {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme a {
+            color: #90caf9; /* Lighter blue for links in dark mode */
+        }
+         body.dark-theme a:hover {
+            color: #bbdefb;
+        }
+
+        body.dark-theme nav {
+            background-color: #333;
+            border-bottom: 1px solid #555;
+        }
+         body.dark-theme nav a {
+             color: #e0e0e0;
+         }
+         body.dark-theme nav a:hover {
+             background-color: #555;
+         }
+
+        body.dark-theme button#theme-toggle {
+            background-color: #555;
+            color: #e0e0e0;
+            border: 1px solid #777;
+        }
+        body.dark-theme button#theme-toggle:hover {
+             background-color: #777;
+        }
+
+        body.dark-theme .prayer-section {
+             background-color: #2a2a2a;
+             border: 1px solid #444;
+        }
+
+        body.dark-theme h1, body.dark-theme h2, body.dark-theme h3 {
+            color: #ffffff;
+        }
+
+        body.dark-theme .prayer-section p, body.dark-theme .prayer-section li {
+             color: #ccc;
+        }
+        body.dark-theme .prayer-section p.prayer-vr strong {
+            color: #e0e0e0;
+        }
+        body.dark-theme .final-notes p {
+            color: #aaa;
+        }
+        body.dark-theme .antiphon {
+            border-left: 3px solid #555;
+        }
+        body.dark-theme .asterisk {
+            color: #aaa;
+        }
+         body.dark-theme h2 { border-bottom: 2px solid #444; }
+         body.dark-theme .final-notes { border-top: 1px solid #444; }
+         body.dark-theme #tessera-image .border-text { color: #bbb; }
+         body.dark-theme #tessera-image .explanation p { color: #bbb; }
+         body.dark-theme #tessera-image .explanation strong { color: #ddd; }
+         body.dark-theme #frank-duff-prayer h4 { color: #ddd; }
+         body.dark-theme #tessera-image .explanation { border-top: 1px solid #444; }
+
+
+        /* Navigation Bar */
+        nav {
+            background-color: #ffffff;
+            padding: 0.75rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.3s ease, border-bottom 0.3s ease;
+            width: 100%; /* Ensure nav takes full width */
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Vertically align if wrapping occurs */
+            flex-wrap: wrap;
+            gap: 5px 15px; /* Row and column gap */
+            padding: 0; /* Remove default ul padding */
+        }
+
+        nav ul li {
+            display: inline;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #0056b3;
+            font-weight: bold;
+            font-size: 0.9rem; /* Slightly smaller font for nav */
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            display: inline-block; /* Ensure padding is applied correctly */
+            white-space: nowrap; /* Prevent link text wrapping */
+        }
+
+        nav ul li a:hover {
+            background-color: #e9ecef;
+            color: #003d80;
+        }
+
+        /* Main Content Area */
+        main {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem; /* Default horizontal padding */
+        }
+
+        /* Sections */
+        .prayer-section {
+            background-color: #ffffff;
+            padding: 1.5rem; /* Default padding */
+            margin-bottom: 1.5rem; /* Slightly reduce margin */
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
+            transition: background-color 0.3s ease, border 0.3s ease;
+        }
+
+        /* Headings */
+        h1, h2, h3 {
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            transition: color 0.3s ease;
+        }
+        h1 { text-align: center; font-size: 1.8rem; margin-bottom: 1.5rem; }
+        h2 { font-size: 1.5rem; border-bottom: 2px solid #eee; padding-bottom: 0.5rem; }
+        h3 { font-size: 1.2rem; font-weight: bold; margin-top: 1.5rem; }
+
+
+        /* Paragraphs and Lists */
+        p, li {
+            margin-bottom: 0.8rem;
+            font-size: 1rem; /* Base paragraph size */
+        }
+
+        /* Tessera Image Section */
+        #tessera-image img {
+            display: block;
+            max-width: 50%; /* Default size for larger screens */
+            height: auto;
+            margin: 0 auto 2rem auto;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        #tessera-image .border-text {
+             text-align:center;
+             font-style:italic;
+             font-size: 0.9rem;
+             color: #555;
+             margin-top: 1rem;
+             margin-bottom: 1.5rem;
+        }
+
+        #tessera-image .explanation {
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+            color: #444;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        #tessera-image .explanation strong {
+             font-style: italic;
+        }
+
+
+         /* Specific Prayer Formatting */
+        .prayer-vr {
+             margin-left: 1em;
+        }
+        .prayer-vr strong {
+             display: inline-block;
+             width: 1.5em;
+             font-weight: bold;
+        }
+
+        .antiphon {
+            font-style: italic;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-left: 1em;
+            border-left: 3px solid #ccc;
+            font-size: 0.95rem; /* Slightly smaller */
+        }
+
+        .asterisk {
+            color: #888;
+        }
+
+        /* Frank Duff Prayer Specific */
+        #frank-duff-prayer h3 {
+            text-align: center;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            border-bottom: none;
+        }
+        #frank-duff-prayer h4 {
+            font-size: 1.1rem;
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: #333;
+            font-weight: normal;
+        }
+
+        #frank-duff-prayer .conclusion {
+             font-weight: bold;
+             margin-top: 1.5rem;
+        }
+
+
+        /* Final Notes (within Concluding section now) */
+        .final-notes {
+            font-size: 0.85rem;
+            color: #555;
+            margin-top: 2rem;
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+            text-align: center;
+        }
+
+
+        /* Theme Toggle Button */
+        button#theme-toggle {
+            position: fixed;
+            bottom: 15px; /* Adjust position slightly */
+            right: 15px;
+            padding: 8px 12px; /* Slightly smaller */
+            font-size: 0.9rem;
+            cursor: pointer;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
+            z-index: 1001;
+        }
+        button#theme-toggle:hover {
+             background-color: #e9ecef;
+        }
+
+        /* -------------------- */
+        /*  Media Queries for Mobile */
+        /* -------------------- */
+        @media (max-width: 768px) {
+            html {
+                font-size: 15px; /* Slightly smaller base font on medium screens */
+            }
+
+             nav ul {
+                gap: 4px 10px; /* Reduce gap further */
+            }
+             nav ul li a {
+                 font-size: 0.85rem; /* Smaller nav font */
+                 padding: 4px 8px;
+             }
+             h1 { font-size: 1.6rem; }
+             h2 { font-size: 1.3rem; }
+             h3 { font-size: 1.1rem; }
+
+             #tessera-image img {
+                 max-width: 70%; /* Increase image size relative to container */
+             }
+        }
+
+
+        @media (max-width: 600px) {
+            html {
+                font-size: 14px; /* Even smaller base font on small screens */
+            }
+
+            main {
+                padding: 0 0.5rem; /* Reduce side padding */
+                margin-top: 1rem; /* Reduce top margin */
+            }
+
+            .prayer-section {
+                padding: 1rem; /* Reduce internal padding */
+                margin-bottom: 1rem;
+            }
+
+            nav {
+                padding: 0.5rem; /* Reduce nav padding */
+            }
+
+            nav ul {
+                justify-content: space-around; /* Spread links out a bit more if they wrap */
+                gap: 3px 5px;
+            }
+             nav ul li a {
+                 font-size: 0.8rem; /* Even smaller nav font */
+                 padding: 3px 6px;
+             }
+
+             h1 { font-size: 1.4rem; margin-bottom: 1rem; }
+             h2 { font-size: 1.2rem; }
+             h3 { font-size: 1.0rem; }
+
+             p, li { font-size: 0.95rem; } /* Adjust paragraph font */
+
+             #tessera-image img {
+                 max-width: 80%; /* Make image more prominent on small screens */
+                 margin-bottom: 1rem;
+             }
+
+             #tessera-image .border-text { font-size: 0.85rem; margin-bottom: 1rem;}
+             #tessera-image .explanation { font-size: 0.9rem; }
+
+             .antiphon { font-size: 0.9rem; }
+
+             #frank-duff-prayer h3 { font-size: 1.1rem; }
+             #frank-duff-prayer h4 { font-size: 1.0rem; }
+
+             .final-notes { font-size: 0.8rem; }
+
+             button#theme-toggle {
+                 bottom: 10px;
+                 right: 10px;
+                 padding: 6px 10px;
+                 font-size: 0.8rem;
+            }
+
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="#tessera-image">Tessera</a></li>
+            <li><a href="#opening-prayers">Opening</a></li>
+            <li><a href="#rosary">Rosary</a></li>
+            <li><a href="#catena-legionis">Catena</a></li>
+            <li><a href="#concluding-prayers">Concluding</a></li>
+            <li><a href="#frank-duff-prayer">Frank Duff</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h1>Legion of Mary Tessera</h1>
+
+        <section id="tessera-image" class="prayer-section">
+            <h2>Tessera</h2>
+            <img src="tessera.JPG" alt="Vexillum Legionis Mariae - Standard of the Legion of Mary">
+            <p class="border-text">
+                Inimicitias ponam inter te et mulierem et semen tuum et semen illius ipsum conteret caput tuum. (Gen 3:15)<br>
+                Ecce Mater tua &bull; Mulier ecce filius tuus. (Jn 19:26-27)<br>
+                Magnificat anima mea Dominum. (Lk 1:46)<br>
+                Beata quae credidit. (Lk 1:45)
+            </p>
+
+            <div class="explanation">
+                <p>The Legion of Mary Tessera image is a powerful symbolic representation of the organization's devotional outlook and spiritual warfare. The border inscription on the Tessera contains several significant Latin phrases:</p>
+                <p><strong>"Inimicitias ponam inter te et mulierem et semen tuum et semen illius; ipsum conteret caput tuum"</strong> - This translates to "I will put enmity between you and the woman, and between your offspring and hers; he will strike your head." (Genesis 3:15). This refers to God's promise of redemption and the eternal conflict between good and evil.</p>
+                <p><strong>"Mulier, ecce filius tuus: . . . Ecce mater tua"</strong> - Meaning "Woman, here is your son . . . Here is your mother." (John 19:26-27). This represents Mary's spiritual motherhood of all believers.</p>
+                <p><strong>"Beata quae credidit"</strong> - Translating to "Blessed is she who believed" (Luke 1:45). This emphasizes Mary's faith and her role in salvation history.</p>
+                <p>The border also features a chain design, symbolizing the Catena (Latin for "chain"), representing the unity of all Legionaries in daily prayer. The inscription and imagery together convey the Legion's devotion to Mary, its spiritual warfare against evil, and the unity of its members in faith and prayer.</p>
+            </div>
+
+        </section>
+
+        <section id="opening-prayers" class="prayer-section">
+            <h2>Opening Prayers</h2>
+            <p>In the name of the Father, etc.</p>
+            <p>Come, O Holy Spirit, fill the hearts of your faithful, and enkindle in them the fire of your love.</p>
+            <p class="prayer-vr"><strong>V.</strong> Send forth your Spirit, O Lord, and they shall be created.</p>
+            <p class="prayer-vr"><strong>R.</strong> And you shall renew the face of the earth.</p>
+
+            <h3>Let us pray</h3>
+            <p>God our Father, pour out the gifts of your Holy Spirit on the world. You sent the Spirit on your Church to begin the teaching of the gospel: now let the Spirit continue to work in the world through the hearts of all who believe.<br>
+            Through Christ our Lord. Amen.</p>
+
+            <p class="prayer-vr"><strong>V.</strong> You, O Lord, will open my lips.</p>
+            <p class="prayer-vr"><strong>R.</strong> And my tongue shall announce your praise.</p>
+            <p class="prayer-vr"><strong>V.</strong> Incline unto my aid, O God.</p>
+            <p class="prayer-vr"><strong>R.</strong> O Lord, make haste to help me.</p>
+            <p class="prayer-vr"><strong>V.</strong> Glory be to the Father, etc.</p>
+            <p class="prayer-vr"><strong>R.</strong> As it was in the beginning, etc.</p>
+        </section>
+
+        <section id="rosary" class="prayer-section">
+            <h2>The Rosary</h2>
+            <p><em>Then follow five decades of the Rosary with the Hail, Holy Queen.</em></p>
+
+            <h3>Hail, Holy Queen</h3>
+            <p>Hail, holy Queen, Mother of Mercy; hail, our life, our sweetness and our hope. To you we cry poor banished children of Eve, to you we send up our sighs, mourning and weeping in this valley of tears. Turn then, O most gracious advocate, your eyes of mercy towards us and after this, our exile, show us the blessed fruit of your womb, Jesus. O clement, O loving, O sweet Virgin Mary.</p>
+            <p class="prayer-vr"><strong>V.</strong> Pray for us, O holy Mother of God.</p>
+            <p class="prayer-vr"><strong>R.</strong> That we may be made worthy of the promises of Christ.</p>
+
+            <h3>Let us pray</h3>
+            <p>O God, whose only-begotten Son, by his life, death and resurrection, has purchased for us the rewards of eternal salvation; grant, we beseech you, that meditating upon these mysteries in the most holy Rosary of the Blessed Virgin Mary, we may imitate what they contain, and obtain what they promise. Through the same Christ our Lord. Amen.</p>
+
+            <p class="prayer-vr"><strong>V.</strong> Most Sacred Heart of Jesus</p>
+            <p class="prayer-vr"><strong>R.</strong> Have mercy on us.</p>
+            <p class="prayer-vr"><strong>V.</strong> Immaculate Heart of Mary</p>
+            <p class="prayer-vr"><strong>R.</strong> Pray for us.</p>
+            <p class="prayer-vr"><strong>V.</strong> St. Joseph</p>
+            <p class="prayer-vr"><strong>R.</strong> Pray for us.</p>
+             <p class="prayer-vr"><strong>V.</strong> St. John the Evangelist</p>
+            <p class="prayer-vr"><strong>R.</strong> Pray for us.</p>
+            <p class="prayer-vr"><strong>V.</strong> St. Louis-Marie de Montfort</p>
+            <p class="prayer-vr"><strong>R.</strong> Pray for us.</p>
+            <p>In the name of the Father, etc.</p>
+        </section>
+
+        <section id="catena-legionis" class="prayer-section">
+            <h2>The Catena Legionis</h2>
+
+            <p class="antiphon">Antiphon. Who is she that comes forth as the morning rising, fair as the moon, bright as the sun, terrible as an army set in battle array?</p>
+
+            <h3>Magnificat (The Canticle of Mary) - Luke 1:46-55</h3>
+            <p>My soul glorifies the Lord,<span class="asterisk">*</span><br>
+            my spirit rejoices in God, my Saviour.<br>
+            He looks on his servant in her lowliness;<span class="asterisk">*</span><br>
+            henceforth all ages will call me blessed.</p>
+
+            <p>The Almighty works marvels for me.<span class="asterisk">*</span><br>
+            Holy his name!<br>
+            His mercy is from age to age,<span class="asterisk">*</span><br>
+            on those who fear him.</p>
+
+            <p>He puts forth his arm in strength<span class="asterisk">*</span><br>
+            and scatters the proud-hearted.<br>
+            He casts the mighty from their thrones<span class="asterisk">*</span><br>
+            and raises the lowly.</p>
+
+            <p>He fills the starving with good things,<span class="asterisk">*</span><br>
+            sends the rich away empty.<br>
+            He protects Israel, his servant,<span class="asterisk">*</span><br>
+            remembering his mercy,<br>
+            the mercy promised to our fathers,<span class="asterisk">*</span><br>
+            to Abraham and his sons for ever.</p>
+
+            <p>Glory be to the Father, and to the Son, and to the Holy Spirit.<br>
+            As it was in the beginning, is now, and ever shall be, world without end, Amen.</p>
+
+            <p class="antiphon">Antiphon. Who is she that comes forth as the morning rising, fair as the moon, bright as the sun, terrible as an army set in battle array?</p>
+
+            <p class="prayer-vr"><strong>V.</strong> O Mary, conceived without sin.</p>
+            <p class="prayer-vr"><strong>R.</strong> Pray for us who have recourse to you.</p>
+
+             <h3>Let us pray</h3>
+             <p>O Lord Jesus Christ, our mediator with the Father, you have been pleased to appoint the most Blessed Virgin, your mother, to be our mother also, and our mediatrix with you, mercifully grant that whoever comes to you seeking your favours may rejoice to receive all of them through her. Amen.</p>
+        </section>
+
+        <section id="concluding-prayers" class="prayer-section">
+            <h2>Concluding Prayers</h2>
+            <p>In the name of the Father, etc.</p>
+            <p>We fly to your patronage, O Holy Mother of God; despise not our prayers in our necessities, but ever deliver us from all dangers, O glorious and blessed Virgin.</p>
+
+            <p class="prayer-vr"><strong>V.</strong> Mary Immaculate, Mediatrix of all Graces<br><em>(or Invocation appropriate to Praesidium)</em></p>
+            <p class="prayer-vr"><strong>R.</strong> Pray for us.</p>
+            <p class="prayer-vr"><strong>V.</strong> Saints Michael, Gabriel and Raphael</p>
+            <p class="prayer-vr"><strong>R.</strong> Pray for us.</p>
+            <p class="prayer-vr"><strong>V.</strong> All you heavenly Powers, Mary's Legion of Angels</p>
+            <p class="prayer-vr"><strong>R.</strong> Pray for us.</p>
+            <p class="prayer-vr"><strong>V.</strong> St. John the Baptist</p>
+            <p class="prayer-vr"><strong>R.</strong> Pray for us.</p>
+            <p class="prayer-vr"><strong>V.</strong> Saints Peter and Paul</p>
+            <p class="prayer-vr"><strong>R.</strong> Pray for us.</p>
+
+            <h3>Let us pray</h3>
+             <p>Confer, O Lord, on us, who serve beneath the standard of Mary, that fullness of faith in you and trust in her, to which it is given to conquer the world. Grant us a lively faith, animated by charity, which will enable us to perform all our actions from the motive of pure love of you, and ever to see you and serve you in our neighbour; a faith, firm and immovable as a rock, through which we shall rest tranquil and steadfast amid the crosses, toils and disappointments of life; a courageous faith which will inspire us to undertake and carry out without hesitation great things for your glory and for the salvation of souls; a faith which will be our Legion's Pillar of Fire - to lead us forth united<br>
+             &mdash; to kindle everywhere the fires of divine love<br>
+             &mdash; to enlighten those who are in darkness and in the shadow of death<br>
+             &mdash; to inflame those who are lukewarm<br>
+             &mdash; to bring back life to those who are dead in sin;<br>
+             and which will guide our own feet in the way of peace; so that &mdash; the battle of life over &mdash; our Legion may reassemble, without the loss of any one, in the kingdom of your love and glory. Amen.</p>
+
+             <p>May the souls of our departed legionaries and the souls of all the faithful departed through the mercy of God rest in peace. Amen.</p>
+
+             <p>In the name of the Father, etc.</p>
+
+             <div class="final-notes">
+                 <p>(Permissu Ordinarii Dioec. Dublinen, die 9a Mar., 1994)</p>
+                 <p>Translation of The Magnificat from the Hebrew published by The Grail by kind permission of A.P. Watt Ltd. on behalf of The Grail, England.</p>
+                 <p>MAHONS, DUBLIN</p>
+             </div>
+        </section>
+
+        <section id="frank-duff-prayer" class="prayer-section">
+            <h2>Prayer for the Beatification of the Servant of God</h2>
+            <h3>Frank Duff</h3>
+
+            <h4>God our Father,</h4>
+
+            <p>You inspired your servant Frank Duff with a profound insight into the mystery of your Church, the Body of Christ, and of the place of Mary the Mother of Jesus in this mystery.<br>
+            In his immense desire to share this insight with others and in filial dependance on Mary, he formed her Legion to be a sign of her maternal love for the world and a means of enlisting all her children in the Church's evangelising work.</p>
+            <p>We thank you Father for the graces conferred on him and for the benefits accruing to the Church from his courageous and shining faith.<br>
+            With confidence we beg you that through his intercession, you grant the petition we lay before you ..........<br>
+            We ask too that if it be in accordance with your will, the holiness of his life may be acknowledged by the Church for the glory of your Name.</p>
+
+            <p class="conclusion">Through Christ Our Lord, Amen</p>
+        </section>
+
+
+    </main>
+
+    <button id="theme-toggle">Toggle Theme</button>
+
+    <script>
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        // Function to set theme based on preference
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-theme');
+                themeToggleBtn.textContent = 'Light Mode';
+            } else {
+                body.classList.remove('dark-theme');
+                themeToggleBtn.textContent = 'Dark Mode';
+            }
+        }
+
+        // Load saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const defaultTheme = savedTheme ? savedTheme : (prefersDark ? 'dark' : 'light');
+        setTheme(defaultTheme);
+
+
+        // Toggle theme on button click
+        themeToggleBtn.addEventListener('click', () => {
+            const isDark = body.classList.contains('dark-theme');
+            const newTheme = isDark ? 'light' : 'dark';
+            setTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+         // Update theme if system preference changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+             if (!localStorage.getItem('theme')) {
+                 const newColorScheme = event.matches ? "dark" : "light";
+                 setTheme(newColorScheme);
+            }
+        });
+
+    </script>
+
+</body>
+</html>
